@@ -47,11 +47,11 @@
         var(--hazard-black) 22px,
         var(--hazard-black) 44px
       );
-      height: 34px;
+      height: 46px;
       display: flex;
       align-items: center;
       overflow: hidden;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       position: sticky;
       top: 0;
       z-index: 101;
@@ -60,12 +60,12 @@
       display: flex;
       white-space: nowrap;
       animation: hazardScroll 25s linear infinite;
-      gap: 2rem;
-      font-size: 0.85rem;
+      gap: 3rem;
+      font-size: 1.15rem;
       font-weight: 900;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: #fff;
-      text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+      text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
     }
     @keyframes hazardScroll {
       0% { transform: translateX(0); }
@@ -79,7 +79,7 @@
       border-bottom: 2px dashed var(--border-dash);
       padding: 0 1.5rem;
       position: sticky;
-      top: 34px;
+      top: 46px;
       z-index: 100;
     }
     .nav-inner {
@@ -100,11 +100,11 @@
     .nav-badge {
       background: #FFE885;
       color: #5C4300;
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      border: 1.5px solid #E6BF19;
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
+      border: 2px solid #E6BF19;
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
@@ -129,23 +129,23 @@
     .hero {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 4rem 1.5rem 3rem;
+      padding: 4.5rem 1.5rem 3rem;
       text-align: center;
       position: relative;
     }
     .construct-banner {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      background: #FFF;
-      border: 2px dashed #E0A800;
-      padding: 0.6rem 1.5rem;
+      gap: 0.8rem;
+      background: #FFF8E6;
+      border: 3px dashed #E0A800;
+      padding: 0.9rem 2.4rem;
       border-radius: 100px;
-      font-size: 0.92rem;
-      font-weight: 800;
-      color: #945B00;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #8A4E00;
       margin-bottom: 2rem;
-      box-shadow: 4px 4px 0 rgba(224, 168, 0, 0.15);
+      box-shadow: 4px 6px 0 rgba(224, 168, 0, 0.22);
       animation: floatBadge 3s ease-in-out infinite;
     }
     @keyframes floatBadge {
@@ -153,7 +153,7 @@
       50% { transform: translateY(-4px); }
     }
     .construct-banner .cone-icon {
-      font-size: 1.3rem;
+      font-size: 1.8rem;
       animation: wiggle 2s infinite ease-in-out;
     }
     @keyframes wiggle {
@@ -163,17 +163,24 @@
     }
 
     .hero-title {
-      font-size: clamp(2.1rem, 5.2vw, 3.8rem);
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
       font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 1.2rem;
+      line-height: 1.3;
+      margin-bottom: 1.4rem;
       letter-spacing: -0.02em;
     }
-    .hero-title .accent {
-      background: linear-gradient(120deg, #E62E2E, #E67E22, #2980B9, #8E44AD);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .construct-badge-large {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 900;
+      color: #8A4E00;
+      background: #FFF2CC;
+      padding: 0.6rem 2rem;
+      border-radius: 20px;
+      border: 3.5px dashed #E0A800;
+      box-shadow: 5px 6px 0 rgba(224, 168, 0, 0.25);
+      letter-spacing: 0.02em;
     }
 
     .hero-desc {
@@ -417,28 +424,30 @@
       margin-bottom: 0.8rem;
     }
     .fn-icon-box {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #FAFAFA;
-      border: 2px dashed #E0D8CB;
+      border: 2.5px solid #222222;
       overflow: hidden;
       flex-shrink: 0;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.12);
     }
     .fn-icon-box img {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       object-fit: contain;
+      filter: none !important;
     }
-    .fn-card.inhibit .fn-icon-box { background: var(--c-inhibit); border-color: #E22B2B; }
-    .fn-card.attention .fn-icon-box { background: var(--c-attention); border-color: #DBA200; }
-    .fn-card.workmemory .fn-icon-box { background: var(--c-workmemory); border-color: #559E27; }
-    .fn-card.cognitive .fn-icon-box { background: var(--c-cognitive); border-color: #E06015; }
-    .fn-card.plan .fn-icon-box { background: var(--c-plan); border-color: #176FBE; }
-    .fn-card.selfmonitor .fn-icon-box { background: var(--c-selfmonitor); border-color: #8839CE; }
+    .fn-card.inhibit .fn-icon-box { background: #FFD6D6; border-color: #222222; }
+    .fn-card.attention .fn-icon-box { background: #FFF0A8; border-color: #222222; }
+    .fn-card.workmemory .fn-icon-box { background: #D6F5C4; border-color: #222222; }
+    .fn-card.cognitive .fn-icon-box { background: #FFE0C7; border-color: #222222; }
+    .fn-card.plan .fn-icon-box { background: #CFE9FC; border-color: #222222; }
+    .fn-card.selfmonitor .fn-icon-box { background: #EBD3FC; border-color: #222222; }
 
     .fn-title {
       font-size: 1.15rem;
@@ -993,14 +1002,14 @@
   <!-- HERO SECTION WITH CONSTRUCTION AESTHETIC -->
   <header class="hero" id="construction">
     <div class="construct-banner">
-      <span class="cone-icon">⚠️</span>
-      <span>系統升級建置中 · 全新 12 款卡牌搶先試玩體驗</span>
       <span class="cone-icon">🚧</span>
+      <span>網站全面施工建置中 · 核心 12 款卡牌搶先試玩體驗</span>
+      <span class="cone-icon">⚠️</span>
     </div>
 
     <h1 class="hero-title">
       大腦指揮官訓練系統<br>
-      <span class="accent">2.0 核心卡牌重磅更新</span>
+      <span class="construct-badge-large">🚧 執行功能訓練卡牌 · 施工建置中 🚧</span>
     </h1>
 
     <p class="hero-desc">
@@ -1021,8 +1030,8 @@
             <path fill-rule="evenodd" d="M10.15 2.1a1 1 0 011.7 0l.45.8a1 1 0 001.05.48l.9-.17a1 1 0 011.2.86l.16.9a1 1 0 00.75.81l.88.25a1 1 0 01.7 1.32l-.3.87a1 1 0 00.37 1.1l.73.55a1 1 0 010 1.5l-.73.55a1 1 0 00-.37 1.1l.3.87a1 1 0 01-.7 1.32l-.88.25a1 1 0 00-.75.81l-.16.9a1 1 0 01-1.2.86l-.9-.17a1 1 0 00-1.05.48l-.45.8a1 1 0 01-1.7 0l-.45-.8a1 1 0 00-1.05-.48l-.9.17a1 1 0 01-1.2-.86l-.16-.9a1 1 0 00-.75-.81l-.88-.25a1 1 0 01-.7-1.32l.3-.87a1 1 0 00-.37-1.1l-.73-.55a1 1 0 010-1.5l.73-.55a1 1 0 00.37-1.1l-.3-.87a1 1 0 01.7-1.32l.88-.25a1 1 0 00.75-.81l.16-.9a1 1 0 011.2-.86l.9.17a1 1 0 001.05-.48l.45-.8z" clip-rule="evenodd"/>
           </svg>
           <div class="construct-info">
-            <h4>🚧 工程施工即時狀態</h4>
-            <p>前端 3D 閃卡引擎上線 · 核心 12 款訓練卡牌已裝載完成</p>
+            <h4 style="font-size: 1.35rem; font-weight: 900; color: #8A4E00;">🚧 網站工程施工狀態</h4>
+            <p style="font-size: 1.05rem; font-weight: 700;">前端 3D 閃卡引擎上線 · 核心 12 款訓練卡牌已裝載完成</p>
           </div>
         </div>
 
@@ -1056,7 +1065,7 @@
       <span class="section-tag">Executive Functions</span>
       <h2 class="section-title">大腦的六大指揮管理系統</h2>
       <p class="section-desc">
-        執行功能就像大腦的交響樂指揮家，由六大系統協同運作。本次 2.0 更新特別為每一個指揮系統均勻配對 2 款核心實戰卡牌！
+        執行功能就像大腦的交響樂指揮家，由六大系統協同運作。本次特別為每一個指揮系統均勻配對 2 款核心實戰卡牌！
       </p>
     </div>
 
@@ -1064,7 +1073,7 @@
       <!-- 抑制 -->
       <div class="fn-card inhibit">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/抑制.png" alt="抑制"></div>
+          <div class="fn-icon-box"><img src="icon_package/抑制.png?v=20261016" alt="抑制"></div>
           <div>
             <div class="fn-title">抑制控制</div>
             <span class="fn-metaphor">🛑 大腦的煞車盾牌</span>
@@ -1076,7 +1085,7 @@
       <!-- 注意力 -->
       <div class="fn-card attention">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/注意力.png" alt="注意力"></div>
+          <div class="fn-icon-box"><img src="icon_package/注意力.png?v=20261016" alt="注意力"></div>
           <div>
             <div class="fn-title">注意力分配</div>
             <span class="fn-metaphor">🔦 大腦的手電筒</span>
@@ -1088,7 +1097,7 @@
       <!-- 工作記憶 -->
       <div class="fn-card workmemory">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/工作記憶.png" alt="工作記憶"></div>
+          <div class="fn-icon-box"><img src="icon_package/工作記憶.png?v=20261016" alt="工作記憶"></div>
           <div>
             <div class="fn-title">工作記憶</div>
             <span class="fn-metaphor">📋 大腦的工作桌面</span>
@@ -1100,7 +1109,7 @@
       <!-- 認知彈性 -->
       <div class="fn-card cognitive">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/認知彈性.png" alt="認知彈性"></div>
+          <div class="fn-icon-box"><img src="icon_package/認知彈性.png?v=20261016" alt="認知彈性"></div>
           <div>
             <div class="fn-title">認知彈性</div>
             <span class="fn-metaphor">⚙️ 大腦的變速齒輪</span>
@@ -1112,7 +1121,7 @@
       <!-- 計畫 -->
       <div class="fn-card plan">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/計畫.png" alt="計畫"></div>
+          <div class="fn-icon-box"><img src="icon_package/計畫.png?v=20261016" alt="計畫"></div>
           <div>
             <div class="fn-title">組織與計畫</div>
             <span class="fn-metaphor">🗺️ 大腦的作戰地圖</span>
@@ -1124,7 +1133,7 @@
       <!-- 自我監控 -->
       <div class="fn-card selfmonitor">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/自我監控.png" alt="自我監控"></div>
+          <div class="fn-icon-box"><img src="icon_package/自我監控.png?v=20261016" alt="自我監控"></div>
           <div>
             <div class="fn-title">自我監控</div>
             <span class="fn-metaphor">🪞 大腦的即時鏡子</span>
