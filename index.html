@@ -3,548 +3,1685 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>深耕台灣計畫 — 執行功能訓練卡牌</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <title>深耕台灣計畫 — 執行功能訓練卡牌 (系統升級建置中)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --c-inhibit: #FF3131;
-      --c-selfmonitor: #8C52FF;
-      --c-attention: #FFDE59;
-      --c-cognitive: #FF914D;
-      --c-plan: #38B6FF;
-      --c-workmemory: #F7D957;
-      --bg: #FFF8EE;
+      --c-inhibit: #FF4D4D;
+      --c-selfmonitor: #A855F7;
+      --c-attention: #F5B800;
+      --c-cognitive: #FF7A29;
+      --c-plan: #208AE6;
+      --c-workmemory: #6CBF3A;
+      --bg: #FDF9F2;
       --card-bg: #FFFFFF;
-      --text: #2D2A32;
-      --text-secondary: #6B6777;
+      --text: #232128;
+      --text-secondary: #5E5B6A;
+      --border-dash: #DDD4C5;
+      --hazard-yellow: #FFD028;
+      --hazard-black: #222222;
       --radius: 20px;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Noto Sans TC', sans-serif;
       color: var(--text);
       background: var(--bg);
-      background-image: radial-gradient(#E8E4DA 1.5px, transparent 1.5px);
-      background-size: 24px 24px;
-      line-height: 1.8;
+      background-image: radial-gradient(#E8DFD0 1.5px, transparent 1.5px);
+      background-size: 26px 26px;
+      line-height: 1.75;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
+    /* SCROLLING HAZARD STRIP TAPE */
+    .hazard-strip {
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--hazard-yellow),
+        var(--hazard-yellow) 22px,
+        var(--hazard-black) 22px,
+        var(--hazard-black) 44px
+      );
+      height: 34px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      position: sticky;
+      top: 0;
+      z-index: 101;
+    }
+    .hazard-marquee {
+      display: flex;
+      white-space: nowrap;
+      animation: hazardScroll 25s linear infinite;
+      gap: 2rem;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      color: #fff;
+      text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    }
+    @keyframes hazardScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     /* NAV */
     .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(255,248,238,0.9);
+      background: rgba(253, 249, 242, 0.94);
       backdrop-filter: blur(12px);
-      border-bottom: 2px dashed #DDD8CC;
+      border-bottom: 2px dashed var(--border-dash);
       padding: 0 1.5rem;
+      position: sticky;
+      top: 34px;
+      z-index: 100;
     }
     .nav-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 58px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
     }
-    .nav-logo {
-      font-weight: 900; font-size: 1.15rem;
-      display: flex; align-items: center; gap: 0.5rem;
+    .nav-brand {
+      font-weight: 900;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
-    .nav-logo span { font-size: 1.4rem; }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-badge {
+      background: #FFE885;
+      color: #5C4300;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1.5px solid #E6BF19;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .nav-links { display: flex; gap: 1rem; list-style: none; }
     .nav-links a {
-      font-size: 0.88rem; font-weight: 700;
+      font-size: 0.88rem;
+      font-weight: 700;
       color: var(--text-secondary);
-      padding: 0.35rem 0.8rem;
+      text-decoration: none;
+      padding: 0.4rem 0.9rem;
       border-radius: 100px;
-      border: 2px solid transparent;
       transition: all 0.2s;
     }
     .nav-links a:hover {
       color: var(--text);
-      border-color: #DDD8CC;
-      background: #fff;
+      background: #FFFFFF;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.06);
     }
 
-    /* HERO */
+    /* HERO: CONSTRUCTION THEME */
     .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 3rem;
       text-align: center;
-      padding: 7rem 1.5rem 4rem;
       position: relative;
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: #fff;
-      border: 2px dashed #E0D8C8;
-      color: var(--text-secondary);
-      font-size: 0.82rem; font-weight: 700;
-      padding: 0.5rem 1.4rem;
+    .construct-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #FFF;
+      border: 2px dashed #E0A800;
+      padding: 0.6rem 1.5rem;
       border-radius: 100px;
-      margin-bottom: 1.8rem;
-      letter-spacing: 0.08em;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #945B00;
+      margin-bottom: 2rem;
+      box-shadow: 4px 4px 0 rgba(224, 168, 0, 0.15);
+      animation: floatBadge 3s ease-in-out infinite;
     }
-    .hero h1 {
-      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-      font-weight: 900; line-height: 1.25;
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
-    .hero h1 .accent {
-      background: linear-gradient(135deg, var(--c-inhibit), var(--c-cognitive), var(--c-plan), var(--c-selfmonitor));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .construct-banner .cone-icon {
+      font-size: 1.3rem;
+      animation: wiggle 2s infinite ease-in-out;
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 5.2vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-title .accent {
+      background: linear-gradient(120deg, #E62E2E, #E67E22, #2980B9, #8E44AD);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero-sub {
-      font-size: 1.1rem; color: var(--text-secondary);
-      max-width: 540px; margin-bottom: 0.4rem;
-    }
-    .hero-credit {
-      font-size: 0.82rem; color: var(--text-secondary);
-      opacity: 0.55; margin-bottom: 3rem;
+
+    .hero-desc {
+      font-size: 1.12rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto 2.2rem;
+      line-height: 1.85;
     }
 
-    /* Hero icon ring */
-    .hero-icons {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      justify-content: center; margin-bottom: 3rem;
-    }
-    .hero-icon {
-      width: 72px; height: 72px;
-      border-radius: 18px;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--card-bg);
-      border: 2.5px dashed #DDD8CC;
-      box-shadow: 3px 3px 0 rgba(0,0,0,0.06);
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-      cursor: default;
-      overflow: hidden;
-    }
-    .hero-icon:hover {
-      transform: translateY(-8px) rotate(-3deg);
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-    }
-    .hero-icon img {
-      width: 40px; height: 40px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-    }
-    .hero-icon.inhibit { background: var(--c-inhibit); border-color: #E02020; }
-    .hero-icon.selfmonitor { background: var(--c-selfmonitor); border-color: #7A3FE0; }
-    .hero-icon.attention { background: var(--c-attention); border-color: #E8C830; }
-    .hero-icon.cognitive { background: var(--c-cognitive); border-color: #E07A30; }
-    .hero-icon.plan { background: var(--c-plan); border-color: #2090E0; }
-    .hero-icon.workmemory { background: var(--c-workmemory); border-color: #E0C030; }
-
-    .hero-cta {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--text); color: #fff;
-      padding: 0.85rem 2.2rem;
-      border-radius: 100px;
-      font-weight: 700; font-size: 1rem;
-      border: none; cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .hero-cta:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    }
-
-    /* SECTIONS */
-    .section {
-      max-width: 1100px; margin: 0 auto;
-      padding: 4.5rem 1.5rem;
-    }
-    .section-title {
-      font-size: 1.8rem; font-weight: 900;
-      text-align: center; margin-bottom: 0.4rem;
-    }
-    .section-desc {
-      text-align: center; color: var(--text-secondary);
-      max-width: 520px; margin: 0 auto 3rem; font-size: 0.95rem;
-    }
-
-    /* FUNCTION CARDS */
-    .func-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.3rem;
-    }
-    .func-card {
-      background: var(--card-bg);
-      border: 2.5px dashed #D8D0C4;
+    /* CONSTRUCTION VISUAL ROW */
+    .construct-status-card {
+      max-width: 760px;
+      margin: 0 auto 3rem;
+      background: #FFFFFF;
+      border: 2.5px dashed var(--border-dash);
       border-radius: var(--radius);
-      padding: 1.6rem;
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-      cursor: default;
+      padding: 1.8rem;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.04);
       position: relative;
       overflow: hidden;
     }
-    .func-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0;
-      height: 4px;
-      opacity: 0; transition: opacity 0.3s;
+    .construct-status-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--hazard-yellow),
+        var(--hazard-yellow) 12px,
+        var(--hazard-black) 12px,
+        var(--hazard-black) 24px
+      );
     }
-    .func-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 6px 6px 0 rgba(0,0,0,0.07);
-    }
-    .func-card:hover::before { opacity: 1; }
-
-    .func-card[data-color="inhibit"]::before { background: var(--c-inhibit); }
-    .func-card[data-color="selfmonitor"]::before { background: var(--c-selfmonitor); }
-    .func-card[data-color="attention"]::before { background: var(--c-attention); }
-    .func-card[data-color="cognitive"]::before { background: var(--c-cognitive); }
-    .func-card[data-color="plan"]::before { background: var(--c-plan); }
-    .func-card[data-color="workmemory"]::before { background: var(--c-workmemory); }
-
-    .func-card-header {
-      display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem;
-    }
-    .func-card-icon {
-      width: 56px; height: 56px;
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      background: #fff;
-      border: 2px dashed #DDD;
-      overflow: hidden;
-    }
-    .func-card-icon img {
-      width: 30px; height: 30px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-    }
-    .func-card-title { font-size: 1.1rem; font-weight: 700; }
-    .func-card-def {
-      font-size: 0.88rem; color: var(--text-secondary);
-      line-height: 1.8; margin-bottom: 0.7rem;
-    }
-    .func-card-metaphor {
-      font-size: 0.8rem; font-weight: 700;
-      padding: 0.3rem 0.85rem;
-      border-radius: 100px; display: inline-block;
-      border: 1.5px dashed;
-    }
-
-    .func-card[data-color="inhibit"] .func-card-icon { background: var(--c-inhibit); border-color: #E02020; }
-    .func-card[data-color="inhibit"] .func-card-metaphor { background: #FFE5E5; color: var(--c-inhibit); border-color: #FFB0B0; }
-
-    .func-card[data-color="selfmonitor"] .func-card-icon { background: var(--c-selfmonitor); border-color: #7A3FE0; }
-    .func-card[data-color="selfmonitor"] .func-card-metaphor { background: #EDE5FF; color: var(--c-selfmonitor); border-color: #C8A8FF; }
-
-    .func-card[data-color="attention"] .func-card-icon { background: var(--c-attention); border-color: #E8C830; }
-    .func-card[data-color="attention"] .func-card-metaphor { background: #FFF8DB; color: #7A6A00; border-color: #F0D870; }
-
-    .func-card[data-color="cognitive"] .func-card-icon { background: var(--c-cognitive); border-color: #E07A30; }
-    .func-card[data-color="cognitive"] .func-card-metaphor { background: #FFF0E5; color: var(--c-cognitive); border-color: #FFC090; }
-
-    .func-card[data-color="plan"] .func-card-icon { background: var(--c-plan); border-color: #2090E0; }
-    .func-card[data-color="plan"] .func-card-metaphor { background: #E5F4FF; color: var(--c-plan); border-color: #A0D8FF; }
-
-    .func-card[data-color="workmemory"] .func-card-icon { background: var(--c-workmemory); border-color: #E0C030; }
-    .func-card[data-color="workmemory"] .func-card-metaphor { background: #FFF8DB; color: #7A6A00; border-color: #F0D870; }
-
-    /* CARD GALLERY */
-    .cards-tabs {
-      display: flex; gap: 0.7rem;
-      justify-content: center; flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    .tab-btn {
-      padding: 0.55rem 1.4rem;
-      border: 2.5px dashed #D8D0C4;
-      border-radius: 100px;
-      background: var(--card-bg);
-      font-family: var(--font-main, 'Noto Sans TC', sans-serif);
-      font-size: 0.88rem; font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-secondary);
-    }
-    .tab-btn:hover { border-color: var(--text); color: var(--text); }
-    .tab-btn.active {
-      color: #fff; border-style: solid; border-color: transparent;
-    }
-    .tab-btn[data-filter="all"].active { background: var(--text); }
-    .tab-btn[data-filter="inhibit"].active { background: var(--c-inhibit); }
-    .tab-btn[data-filter="attention"].active { background: var(--c-attention); color: #333; }
-    .tab-btn[data-filter="workmemory"].active { background: var(--c-workmemory); color: #333; }
-
-    .cards-grid {
+    .construct-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      align-items: center;
+      text-align: left;
+    }
+    .construct-gear-box {
+      display: flex;
+      align-items: center;
       gap: 1.2rem;
     }
-    .card {
-      background: var(--card-bg);
-      border: 2.5px dashed #D8D0C4;
-      border-radius: var(--radius);
+    .gear-svg {
+      width: 58px;
+      height: 58px;
+      animation: spin 10s linear infinite;
+      flex-shrink: 0;
+      color: #E67E22;
+    }
+    .gear-svg.reverse {
+      width: 44px;
+      height: 44px;
+      animation: spinReverse 7s linear infinite;
+      color: #2980B9;
+      margin-left: -22px;
+      margin-top: 24px;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
+
+    .construct-info h4 {
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .construct-info p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .progress-wrap {
+      margin-top: 0.8rem;
+    }
+    .progress-bar-bg {
+      height: 14px;
+      background: #EFE8DA;
+      border-radius: 100px;
       overflow: hidden;
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-      cursor: pointer;
+      border: 1px solid #DCD0BE;
       position: relative;
     }
-    .card:hover {
-      transform: translateY(-6px) rotate(-1deg);
-      box-shadow: 8px 8px 0 rgba(0,0,0,0.08);
+    .progress-bar-fill {
+      width: 85%;
+      height: 100%;
+      background: linear-gradient(90deg, #F39C12, #27AE60);
+      background-size: 30px 30px;
+      background-image: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0.25) 75%,
+        transparent 75%,
+        transparent
+      );
+      animation: moveStripes 2s linear infinite;
+      border-radius: 100px;
     }
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0;
-      height: 4px; opacity: 0; transition: opacity 0.3s;
+    @keyframes moveStripes {
+      0% { background-position: 0 0; }
+      100% { background-position: 60px 0; }
     }
-    .card:hover::before { opacity: 1; }
-    .card[data-category="inhibit"]::before { background: var(--c-inhibit); }
-    .card[data-category="attention"]::before { background: var(--c-attention); }
-    .card[data-category="workmemory"]::before { background: var(--c-workmemory); }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-top: 0.35rem;
+    }
 
-    .card-img {
-      width: 100%;
-      object-fit: contain;
-      display: block;
-      background: #fff;
+    /* ACTION BUTTONS */
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
     }
-    .card.hidden { display: none; }
+    .btn-primary {
+      background: var(--text);
+      color: #FFF;
+      padding: 0.9rem 2.2rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+      border: 2px solid var(--text);
+    }
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 6px 8px 16px rgba(0,0,0,0.2);
+    }
+    .btn-secondary {
+      background: #FFFFFF;
+      color: var(--text);
+      padding: 0.9rem 1.8rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 2px dashed var(--border-dash);
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    /* SECTION STYLING */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.8rem;
+    }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      background: #FFF;
+      border: 2px dashed var(--border-dash);
+      color: var(--text-secondary);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-size: 2.1rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.6rem;
+    }
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* 6 FUNCTIONS GRID */
+    .functions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.3rem;
+      margin-bottom: 2rem;
+    }
+    .fn-card {
+      background: var(--card-bg);
+      border: 2.5px dashed var(--border-dash);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .fn-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 6px 8px 0 rgba(0,0,0,0.06);
+    }
+    .fn-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+    }
+    .fn-card.inhibit::before { background: var(--c-inhibit); }
+    .fn-card.attention::before { background: var(--c-attention); }
+    .fn-card.workmemory::before { background: var(--c-workmemory); }
+    .fn-card.cognitive::before { background: var(--c-cognitive); }
+    .fn-card.plan::before { background: var(--c-plan); }
+    .fn-card.selfmonitor::before { background: var(--c-selfmonitor); }
+
+    .fn-card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+    .fn-icon-box {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FAFAFA;
+      border: 2px dashed #E0D8CB;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .fn-icon-box img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+    .fn-card.inhibit .fn-icon-box { background: var(--c-inhibit); border-color: #E22B2B; }
+    .fn-card.attention .fn-icon-box { background: var(--c-attention); border-color: #DBA200; }
+    .fn-card.workmemory .fn-icon-box { background: var(--c-workmemory); border-color: #559E27; }
+    .fn-card.cognitive .fn-icon-box { background: var(--c-cognitive); border-color: #E06015; }
+    .fn-card.plan .fn-icon-box { background: var(--c-plan); border-color: #176FBE; }
+    .fn-card.selfmonitor .fn-icon-box { background: var(--c-selfmonitor); border-color: #8839CE; }
+
+    .fn-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+    .fn-metaphor {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      border: 1px dashed;
+      display: inline-block;
+      margin-top: 0.2rem;
+    }
+    .fn-card.inhibit .fn-metaphor { background: #FFE8E8; color: var(--c-inhibit); border-color: #FFA3A3; }
+    .fn-card.attention .fn-metaphor { background: #FFF9DB; color: #8A6D00; border-color: #F0D550; }
+    .fn-card.workmemory .fn-metaphor { background: #EBF8E3; color: #43801D; border-color: #A6E285; }
+    .fn-card.cognitive .fn-metaphor { background: #FFF1E6; color: var(--c-cognitive); border-color: #FFB787; }
+    .fn-card.plan .fn-metaphor { background: #E6F3FD; color: var(--c-plan); border-color: #93CEF8; }
+    .fn-card.selfmonitor .fn-metaphor { background: #F6EBFF; color: var(--c-selfmonitor); border-color: #D3A4FF; }
+
+    .fn-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* CARD GALLERY & FILTER */
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .filter-btn {
+      padding: 0.55rem 1.3rem;
+      border-radius: 100px;
+      border: 2px dashed var(--border-dash);
+      background: var(--card-bg);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover {
+      border-color: var(--text);
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+    .filter-btn.active {
+      background: var(--text);
+      color: #FFF;
+      border-color: var(--text);
+      border-style: solid;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+    }
+    .filter-btn[data-cat="inhibit"].active { background: var(--c-inhibit); border-color: var(--c-inhibit); }
+    .filter-btn[data-cat="attention"].active { background: var(--c-attention); border-color: var(--c-attention); color: #3A2B00; }
+    .filter-btn[data-cat="workmemory"].active { background: var(--c-workmemory); border-color: var(--c-workmemory); color: #1F3E0B; }
+    .filter-btn[data-cat="cognitive"].active { background: var(--c-cognitive); border-color: var(--c-cognitive); }
+    .filter-btn[data-cat="plan"].active { background: var(--c-plan); border-color: var(--c-plan); }
+    .filter-btn[data-cat="selfmonitor"].active { background: var(--c-selfmonitor); border-color: var(--c-selfmonitor); }
+
+    /* CARDS 3D GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.6rem;
+      perspective: 1200px;
+    }
+
+    /* CARD ITEM WITH 3D TILT & HOLO SHINE */
+    .card-item {
+      background: #FFFFFF;
+      border: 2.5px dashed var(--border-dash);
+      border-radius: 22px;
+      padding: 0.9rem;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s ease-out, box-shadow 0.25s ease, border-color 0.25s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
+      user-select: none;
+    }
+    .card-item:hover {
+      border-color: var(--text);
+      box-shadow: 8px 12px 24px rgba(0,0,0,0.12);
+    }
+    .card-item.hidden { display: none; }
+
+    /* Holo shimmer overlay */
+    .card-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      background: radial-gradient(
+        circle 180px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.75) 0%,
+        rgba(255, 220, 100, 0.35) 30%,
+        rgba(150, 220, 255, 0.25) 55%,
+        transparent 80%
+      );
+      mix-blend-mode: overlay;
+      z-index: 5;
+    }
+    .card-item:hover::after {
+      opacity: 1;
+    }
+
+    .card-img-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #FAF8F5;
+      border: 1.5px solid #EBE4D8;
+      position: relative;
+      aspect-ratio: 709 / 1075;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .card-item:hover .card-img-wrap img {
+      transform: scale(1.025);
+    }
+
+    .card-meta {
+      padding: 0.8rem 0.4rem 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-title-label {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+    .card-cat-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      color: #FFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .card-cat-badge.inhibit { background: var(--c-inhibit); }
+    .card-cat-badge.attention { background: var(--c-attention); color: #3A2B00; }
+    .card-cat-badge.workmemory { background: var(--c-workmemory); color: #173307; }
+    .card-cat-badge.cognitive { background: var(--c-cognitive); }
+    .card-cat-badge.plan { background: var(--c-plan); }
+    .card-cat-badge.selfmonitor { background: var(--c-selfmonitor); }
+
+    .card-click-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed #E6DECة;
+    }
+    .card-click-hint span {
+      transition: transform 0.2s;
+    }
+    .card-item:hover .card-click-hint span {
+      transform: translateX(3px);
+    }
+
+    /* MODAL: 3D CARD INSPECTOR & FLIP */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 25, 0.82);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-container {
+      background: #FFFFFF;
+      border: 3px solid var(--text);
+      border-radius: 28px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 12px 16px 0 rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.open .modal-container {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 42px;
+      height: 42px;
+      background: #FFFFFF;
+      border: 2px solid var(--text);
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      z-index: 20;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    }
+    .modal-close-btn:hover {
+      background: var(--hazard-yellow);
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    /* 3D FLIP STAGE */
+    .modal-stage {
+      background: #F4EFE6;
+      background-image: radial-gradient(#DECDB8 1.5px, transparent 1.5px);
+      background-size: 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.2rem 1.5rem;
+      perspective: 1200px;
+      position: relative;
+    }
+    .card-3d-box {
+      width: 250px;
+      height: 380px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: grab;
+      filter: drop-shadow(0 16px 24px rgba(0,0,0,0.2));
+    }
+    .card-3d-box:active { cursor: grabbing; }
+    .card-3d-box.flipped {
+      transform: rotateY(180deg);
+    }
+    .card-3d-box.spin-animation {
+      animation: autoSpin 12s linear infinite;
+    }
+    @keyframes autoSpin {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      background: #FFF;
+    }
+    .card-face.front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-face.back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #2D283E 0%, #17151F 100%);
+      color: #FFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+      border: 3px solid #FFD028;
+    }
+    .card-back-pattern {
+      position: absolute;
+      inset: 8px;
+      border: 2px dashed rgba(255, 208, 40, 0.4);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+    .card-back-emblem {
+      font-size: 3rem;
+      margin-bottom: 0.8rem;
+      filter: drop-shadow(0 0 12px rgba(255, 208, 40, 0.5));
+    }
+    .card-back-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #FFD028;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+    .card-back-sub {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+    }
+
+    /* FLIP & ROTATE CONTROLS */
+    .stage-controls {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1.4rem;
+      z-index: 10;
+    }
+    .stage-btn {
+      background: #FFFFFF;
+      border: 2px solid var(--text);
+      padding: 0.45rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    }
+    .stage-btn:hover {
+      background: var(--text);
+      color: #FFF;
+      transform: translateY(-2px);
+    }
+
+    /* MODAL DETAILS */
+    .modal-details {
+      padding: 2.4rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #FFF;
+    }
+    .modal-tag-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.8rem;
+    }
+    .modal-cat-tag {
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 0.25rem 0.8rem;
+      border-radius: 100px;
+      color: #FFF;
+    }
+    .modal-sub-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      background: #F4EFE6;
+      color: var(--text-secondary);
+      border: 1px dashed #D2C4AF;
+    }
+
+    .modal-card-name {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .modal-desc-box {
+      background: #FDF9F2;
+      border: 2px dashed var(--border-dash);
+      border-radius: 16px;
+      padding: 1.2rem;
+      margin-bottom: 1.4rem;
+    }
+    .modal-desc-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .modal-desc-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .modal-tip-box {
+      border-left: 4px solid #E67E22;
+      background: #FFF8EE;
+      padding: 0.9rem 1.1rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1.6rem;
+    }
+    .modal-tip-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #A35000;
+      margin-bottom: 0.2rem;
+    }
+    .modal-tip-text {
+      font-size: 0.92rem;
+      color: #5C3800;
+      line-height: 1.6;
+    }
+
+    .modal-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 2px dashed var(--border-dash);
+    }
+    .modal-nav-btn {
+      background: #FFF;
+      border: 2px solid var(--text);
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+    .modal-nav-btn:hover {
+      background: var(--text);
+      color: #FFF;
+    }
 
     /* FOOTER */
     .footer {
+      background: #FFF;
+      border-top: 2px dashed var(--border-dash);
+      padding: 3.5rem 1.5rem 3rem;
       text-align: center;
-      padding: 3rem 1.5rem;
-      border-top: 2px dashed #D8D0C4;
       color: var(--text-secondary);
-      font-size: 0.82rem;
+      font-size: 0.9rem;
+      position: relative;
+    }
+    .footer-hazard {
+      height: 8px;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--hazard-yellow),
+        var(--hazard-yellow) 15px,
+        var(--hazard-black) 15px,
+        var(--hazard-black) 30px
+      );
+      position: absolute;
+      top: 0; left: 0; right: 0;
+    }
+    .footer-brand {
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
     }
 
     /* RESPONSIVE */
-    @media (max-width: 768px) {
+    @media (max-width: 860px) {
+      .modal-container {
+        grid-template-columns: 1fr;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-stage {
+        padding: 1.5rem;
+      }
+      .card-3d-box {
+        width: 190px;
+        height: 290px;
+      }
+      .modal-details {
+        padding: 1.5rem;
+      }
       .nav-links { display: none; }
-      .hero { padding: 5.5rem 1.2rem 3rem; }
-      .hero-icons { gap: 0.7rem; }
-      .hero-icon { width: 56px; height: 56px; border-radius: 14px; }
-      .hero-icon img { width: 30px; height: 30px; }
-      .func-grid { grid-template-columns: 1fr; }
-      .cards-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; }
-      .section { padding: 3rem 1.2rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- TOP HAZARD MARQUEE -->
+  <div class="hazard-strip">
+    <div class="hazard-marquee">
+      <span>🚧 網站全面升級中 · UNDER CONSTRUCTION 🚧</span>
+      <span>★ 深耕台灣計畫 × 林口長庚兒童心智科 ★</span>
+      <span>🧠 執行功能訓練卡牌 2.0 系統全新建置中 🧠</span>
+      <span>✨ 搶先開放 12 款核心心智訓練卡牌互動體驗 ✨</span>
+      <span>🚧 網站全面升級中 · UNDER CONSTRUCTION 🚧</span>
+      <span>★ 深耕台灣計畫 × 林口長庚兒童心智科 ★</span>
+      <span>🧠 執行功能訓練卡牌 2.0 系統全新建置中 🧠</span>
+      <span>✨ 搶先開放 12 款核心心智訓練卡牌互動體驗 ✨</span>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
   <nav class="nav">
     <div class="nav-inner">
-      <div class="nav-logo">林口長庚兒童心智科-執行功能訓練卡牌</div>
+      <div class="nav-brand">
+        <span>🧠</span>
+        <span>林口長庚兒童心智科 · 執行功能訓練系統</span>
+        <span class="nav-badge">🚧 升級建置中</span>
+      </div>
       <ul class="nav-links">
-        <li><a href="#functions">六大功能</a></li>
-        <li><a href="#cards">卡牌總覽</a></li>
+        <li><a href="#construction">施工進度</a></li>
+        <li><a href="#functions">六大指揮系統</a></li>
+        <li><a href="#cards">12 款全新卡牌</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1><br>什麼是執行功能訓練?</h1>
-    <p class="hero-sub">
-      我們試圖透過系統化的卡牌訓練，訓練青少年的衝動控制、專注力、工作記憶與更多執行功能，讓大腦的變得更強大!
-    </p>
-    <p class="hero-credit">林口長庚兒童心智科 × 衛生福利部-深耕台灣計畫</p>
-
-    <div class="hero-icons">
-      <div class="hero-icon inhibit"><img src="icon_package/抑制.png" alt="抑制"></div>
-      <div class="hero-icon selfmonitor"><img src="icon_package/自我監控.png" alt="自我監控"></div>
-      <div class="hero-icon attention"><img src="icon_package/注意力.png" alt="注意力"></div>
-      <div class="hero-icon cognitive"><img src="icon_package/認知彈性.png" alt="認知彈性"></div>
-      <div class="hero-icon plan"><img src="icon_package/計畫.png" alt="計畫"></div>
-      <div class="hero-icon workmemory"><img src="icon_package/工作記憶.png" alt="工作記憶"></div>
+  <!-- HERO SECTION WITH CONSTRUCTION AESTHETIC -->
+  <header class="hero" id="construction">
+    <div class="construct-banner">
+      <span class="cone-icon">⚠️</span>
+      <span>系統升級建置中 · 全新 12 款卡牌搶先試玩體驗</span>
+      <span class="cone-icon">🚧</span>
     </div>
 
-    <a href="#functions" class="hero-cta">認識六大功能 ↓</a>
-  </section>
+    <h1 class="hero-title">
+      大腦指揮官訓練系統<br>
+      <span class="accent">2.0 核心卡牌重磅更新</span>
+    </h1>
 
-  <!-- FUNCTIONS -->
+    <p class="hero-desc">
+      我們正在重新升級執行功能數位訓練平台！<br>
+      依據臨床心智訓練與最新認知科學，我們精煉出涵蓋<strong>抑制、注意力、工作記憶、認知彈性、計畫與自我監控</strong>之 12 款核心卡牌，帶給青少年與家長更直覺、富趣味的大腦成長指引。
+    </p>
+
+    <!-- CONSTRUCTION STATUS WIDGET -->
+    <div class="construct-status-card">
+      <div class="construct-grid">
+        <div class="construct-gear-box">
+          <svg class="gear-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+            <path fill-rule="evenodd" d="M10.15 2.1a1 1 0 011.7 0l.45.8a1 1 0 001.05.48l.9-.17a1 1 0 011.2.86l.16.9a1 1 0 00.75.81l.88.25a1 1 0 01.7 1.32l-.3.87a1 1 0 00.37 1.1l.73.55a1 1 0 010 1.5l-.73.55a1 1 0 00-.37 1.1l.3.87a1 1 0 01-.7 1.32l-.88.25a1 1 0 00-.75.81l-.16.9a1 1 0 01-1.2.86l-.9-.17a1 1 0 00-1.05.48l-.45.8a1 1 0 01-1.7 0l-.45-.8a1 1 0 00-1.05-.48l-.9.17a1 1 0 01-1.2-.86l-.16-.9a1 1 0 00-.75-.81l-.88-.25a1 1 0 01-.7-1.32l.3-.87a1 1 0 00-.37-1.1l-.73-.55a1 1 0 010-1.5l.73-.55a1 1 0 00.37-1.1l-.3-.87a1 1 0 01.7-1.32l.88-.25a1 1 0 00.75-.81l.16-.9a1 1 0 011.2-.86l.9.17a1 1 0 001.05-.48l.45-.8z" clip-rule="evenodd"/>
+          </svg>
+          <svg class="gear-svg reverse" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+            <path fill-rule="evenodd" d="M10.15 2.1a1 1 0 011.7 0l.45.8a1 1 0 001.05.48l.9-.17a1 1 0 011.2.86l.16.9a1 1 0 00.75.81l.88.25a1 1 0 01.7 1.32l-.3.87a1 1 0 00.37 1.1l.73.55a1 1 0 010 1.5l-.73.55a1 1 0 00-.37 1.1l.3.87a1 1 0 01-.7 1.32l-.88.25a1 1 0 00-.75.81l-.16.9a1 1 0 01-1.2.86l-.9-.17a1 1 0 00-1.05.48l-.45.8a1 1 0 01-1.7 0l-.45-.8a1 1 0 00-1.05-.48l-.9.17a1 1 0 01-1.2-.86l-.16-.9a1 1 0 00-.75-.81l-.88-.25a1 1 0 01-.7-1.32l.3-.87a1 1 0 00-.37-1.1l-.73-.55a1 1 0 010-1.5l.73-.55a1 1 0 00.37-1.1l-.3-.87a1 1 0 01.7-1.32l.88-.25a1 1 0 00.75-.81l.16-.9a1 1 0 011.2-.86l.9.17a1 1 0 001.05-.48l.45-.8z" clip-rule="evenodd"/>
+          </svg>
+          <div class="construct-info">
+            <h4>🚧 工程施工即時狀態</h4>
+            <p>前端 3D 閃卡引擎上線 · 核心 12 款訓練卡牌已裝載完成</p>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill"></div>
+          </div>
+          <div class="progress-label">
+            <span>研發與設計進度</span>
+            <span>85% COMPLETED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALL TO ACTIONS -->
+    <div class="hero-actions">
+      <a href="#cards" class="btn-primary">
+        <span>🃏 立即探索 12 款全新卡牌</span>
+        <span>↓</span>
+      </a>
+      <a href="#functions" class="btn-secondary">
+        <span>🧭 認識大腦六大系統</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- SIX EXECUTIVE FUNCTIONS SECTION -->
   <section class="section" id="functions">
-    <h2 class="section-title">大腦的六大管理系統</h2>
-    <p class="section-desc">
-      執行功能並非單一的能力，它更像是大腦複雜的指揮系統，以下共有六大指揮系統，理解每種執行功能，不只能讓我們更了解自己，還能找到適合自己的大腦指揮策略！
-    </p>
-    <div class="func-grid">
+    <div class="section-header">
+      <span class="section-tag">Executive Functions</span>
+      <h2 class="section-title">大腦的六大指揮管理系統</h2>
+      <p class="section-desc">
+        執行功能就像大腦的交響樂指揮家，由六大系統協同運作。本次 2.0 更新特別為每一個指揮系統均勻配對 2 款核心實戰卡牌！
+      </p>
+    </div>
+
+    <div class="functions-grid">
       <!-- 抑制 -->
-      <div class="func-card" data-color="inhibit">
-        <div class="func-card-header">
-          <div class="func-card-icon"><img src="icon_package/抑制.png" alt=""></div>
-          <div class="func-card-title">抑制</div>
+      <div class="fn-card inhibit">
+        <div class="fn-card-top">
+          <div class="fn-icon-box"><img src="icon_package/抑制.png" alt="抑制"></div>
+          <div>
+            <div class="fn-title">抑制控制</div>
+            <span class="fn-metaphor">🛑 大腦的煞車盾牌</span>
+          </div>
         </div>
-        <p class="func-card-def">控制衝動、暫停反應，讓你在行動前先思考，不被誘惑左右。</p>
-        <span class="func-card-metaphor">大腦的盾牌</span>
+        <p class="fn-desc">控制衝動、暫停反應，讓你在行動前先思考三秒，不被一時誘惑或情緒牽著走。</p>
       </div>
-      <!-- 自我監控 -->
-      <div class="func-card" data-color="selfmonitor">
-        <div class="func-card-header">
-          <div class="func-card-icon"><img src="icon_package/自我監控.png" alt=""></div>
-          <div class="func-card-title">自我監控</div>
-        </div>
-        <p class="func-card-def">檢視自己的表現與狀態，隨時調整做法，確保達成目標。</p>
-        <span class="func-card-metaphor">大腦的眼睛</span>
-      </div>
+
       <!-- 注意力 -->
-      <div class="func-card" data-color="attention">
-        <div class="func-card-header">
-          <div class="func-card-icon"><img src="icon_package/注意力.png" alt=""></div>
-          <div class="func-card-title">注意力</div>
+      <div class="fn-card attention">
+        <div class="fn-card-top">
+          <div class="fn-icon-box"><img src="icon_package/注意力.png" alt="注意力"></div>
+          <div>
+            <div class="fn-title">注意力分配</div>
+            <span class="fn-metaphor">🔦 大腦的手電筒</span>
+          </div>
         </div>
-        <p class="func-card-def">過濾掉干擾，將焦點保持在當下的任務上，並能長時間持續投入。</p>
-        <span class="func-card-metaphor">大腦的手電筒</span>
+        <p class="fn-desc">過濾背景雜訊與干擾，將焦點精準鎖定在關鍵任務，長時間持續專注投入。</p>
       </div>
-      <!-- 認知彈性 -->
-      <div class="func-card" data-color="cognitive">
-        <div class="func-card-header">
-          <div class="func-card-icon"><img src="icon_package/認知彈性.png" alt=""></div>
-          <div class="func-card-title">認知彈性</div>
-        </div>
-        <p class="func-card-def">靈活切換思考，當原定計畫行不通時，能快速找出解決方案。</p>
-        <span class="func-card-metaphor">大腦的變速器</span>
-      </div>
-      <!-- 計畫 -->
-      <div class="func-card" data-color="plan">
-        <div class="func-card-header">
-          <div class="func-card-icon"><img src="icon_package/計畫.png" alt=""></div>
-          <div class="func-card-title">計畫</div>
-        </div>
-        <p class="func-card-def">為達成目標拆解步驟，並預先設想好執行的順序與資源。</p>
-        <span class="func-card-metaphor">大腦的戰情室</span>
-      </div>
+
       <!-- 工作記憶 -->
-      <div class="func-card" data-color="workmemory">
-        <div class="func-card-header">
-          <div class="func-card-icon"><img src="icon_package/工作記憶.png" alt=""></div>
-          <div class="func-card-title">工作記憶</div>
+      <div class="fn-card workmemory">
+        <div class="fn-card-top">
+          <div class="fn-icon-box"><img src="icon_package/工作記憶.png" alt="工作記憶"></div>
+          <div>
+            <div class="fn-title">工作記憶</div>
+            <span class="fn-metaphor">📋 大腦的工作桌面</span>
+          </div>
         </div>
-        <p class="func-card-def">像是大腦的工作臺，讓你把資訊放在桌上，並運用它們來處理問題。</p>
-        <span class="func-card-metaphor">大腦的工作臺</span>
+        <p class="fn-desc">把當下需要的步驟、數字與條件暫時放在心智桌面上，並在思考中靈活調度運用。</p>
+      </div>
+
+      <!-- 認知彈性 -->
+      <div class="fn-card cognitive">
+        <div class="fn-card-top">
+          <div class="fn-icon-box"><img src="icon_package/認知彈性.png" alt="認知彈性"></div>
+          <div>
+            <div class="fn-title">認知彈性</div>
+            <span class="fn-metaphor">⚙️ 大腦的變速齒輪</span>
+          </div>
+        </div>
+        <p class="fn-desc">遇上瓶頸或突發狀況時，能快速切換不同視角與方案，不死鑽牛角尖。</p>
+      </div>
+
+      <!-- 計畫 -->
+      <div class="fn-card plan">
+        <div class="fn-card-top">
+          <div class="fn-icon-box"><img src="icon_package/計畫.png" alt="計畫"></div>
+          <div>
+            <div class="fn-title">組織與計畫</div>
+            <span class="fn-metaphor">🗺️ 大腦的作戰地圖</span>
+          </div>
+        </div>
+        <p class="fn-desc">為複雜目標拆解具體步驟，從終點倒推時程，畫出清晰且能踏實執行的藍圖。</p>
+      </div>
+
+      <!-- 自我監控 -->
+      <div class="fn-card selfmonitor">
+        <div class="fn-card-top">
+          <div class="fn-icon-box"><img src="icon_package/自我監控.png" alt="自我監控"></div>
+          <div>
+            <div class="fn-title">自我監控</div>
+            <span class="fn-metaphor">🪞 大腦的即時鏡子</span>
+          </div>
+        </div>
+        <p class="fn-desc">在進行任務中隨時檢視自身狀態與進度，及時偵測盲點與錯誤並校正方向。</p>
       </div>
     </div>
   </section>
 
-  <!-- CARD GALLERY -->
+  <!-- 12 CARDS INTERACTIVE SHOWCASE -->
   <section class="section" id="cards">
-    <h2 class="section-title">卡牌總覽</h2>
-    <p class="section-desc">
-      每一種卡牌都是一個工具，讓我們能更好地掌握執行功能，提升學習與生活品質，目前共有 24 張訓練卡牌，涵蓋三大執行功能。點擊上方分類按鈕，快速找到你想訓練的功能！
-    </p>
-    <div class="cards-tabs">
-      <button class="tab-btn active" data-filter="all">全部卡牌</button>
-      <button class="tab-btn" data-filter="inhibit">抑制 🔴</button>
-      <button class="tab-btn" data-filter="attention">注意力 🟡</button>
-      <button class="tab-btn" data-filter="workmemory">工作記憶 🟠</button>
+    <div class="section-header">
+      <span class="section-tag">New Card Collection</span>
+      <h2 class="section-title">全新 12 張核心卡牌搶先試玩</h2>
+      <p class="section-desc">
+        將滑鼠移至卡牌上可感受 <strong>3D 視差與全息閃光</strong>；點擊任意卡牌可<strong>放大檢視、旋轉 360° 與 3D 翻轉卡背</strong>！
+      </p>
     </div>
-    <div class="cards-grid">
-      <!-- ===== 抑制（紅） ===== -->
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_24.jpg" alt="環境調整法">
+
+    <!-- FILTER TABS -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-cat="all">✨ 全部卡牌 (12)</button>
+      <button class="filter-btn" data-cat="inhibit">🔴 抑制 (2)</button>
+      <button class="filter-btn" data-cat="attention">🟡 注意力 (2)</button>
+      <button class="filter-btn" data-cat="workmemory">🟢 工作記憶 (2)</button>
+      <button class="filter-btn" data-cat="cognitive">🟠 認知彈性 (2)</button>
+      <button class="filter-btn" data-cat="plan">🔵 計畫 (2)</button>
+      <button class="filter-btn" data-cat="selfmonitor">🟣 自我監控 (2)</button>
+    </div>
+
+    <!-- 12 CARDS GRID -->
+    <div class="cards-grid" id="cardsGrid">
+      <!-- 1: 再想一下法 (抑制) -->
+      <div class="card-item" data-cat="inhibit" data-index="0">
+        <div class="card-img-wrap">
+          <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C.jpg" alt="再想一下法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">再想一下法</div>
+          <span class="card-cat-badge inhibit">抑制 🛑</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_23.jpg" alt="若則計劃法">
+
+      <!-- 2: 想法放下法 (抑制) -->
+      <div class="card-item" data-cat="inhibit" data-index="1">
+        <div class="card-img-wrap">
+          <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-2.jpg" alt="想法放下法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">想法放下法</div>
+          <span class="card-cat-badge inhibit">抑制 🛑</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_22.jpg" alt="想法暫存法">
+
+      <!-- 3: 目標鎖定法 (注意力) -->
+      <div class="card-item" data-cat="attention" data-index="2">
+        <div class="card-img-wrap">
+          <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-3.jpg" alt="目標鎖定法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">目標鎖定法</div>
+          <span class="card-cat-badge attention">注意力 🔦</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_21.jpg" alt="衝動暫停法">
+
+      <!-- 4: 線索搜查法 (注意力) -->
+      <div class="card-item" data-cat="attention" data-index="3">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83.jpg" alt="線索搜查法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">線索搜查法</div>
+          <span class="card-cat-badge attention">注意力 🔦</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_20.jpg" alt="習慣轉換法">
+
+      <!-- 5: 動態替換法 (工作記憶) -->
+      <div class="card-item" data-cat="workmemory" data-index="4">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-2.jpg" alt="動態替換法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">動態替換法</div>
+          <span class="card-cat-badge workmemory">工作記憶 📋</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_19.jpg" alt="冷卻思考法">
+
+      <!-- 6: 心算暫存法 (工作記憶) -->
+      <div class="card-item" data-cat="workmemory" data-index="5">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-3.jpg" alt="心算暫存法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">心算暫存法</div>
+          <span class="card-cat-badge workmemory">工作記憶 📋</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_18.jpg" alt="未來視角法">
+
+      <!-- 7: 備案開箱法 (認知彈性) -->
+      <div class="card-item" data-cat="cognitive" data-index="6">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg" alt="備案開箱法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">備案開箱法</div>
+          <span class="card-cat-badge cognitive">認知彈性 ⚙️</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="inhibit">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_17.jpg" alt="呼吸冷靜法">
+
+      <!-- 8: 角色借用法 (認知彈性) -->
+      <div class="card-item" data-cat="cognitive" data-index="7">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg" alt="角色借用法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">角色借用法</div>
+          <span class="card-cat-badge cognitive">認知彈性 ⚙️</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <!-- ===== 注意力（黃） ===== -->
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_16.jpg" alt="共伴專注法">
+
+      <!-- 9: 第一小步法 (計畫) -->
+      <div class="card-item" data-cat="plan" data-index="8">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-6.jpg" alt="第一小步法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">第一小步法</div>
+          <span class="card-cat-badge plan">計畫 🗺️</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_15.jpg" alt="步驟導航法">
+
+      <!-- 10: 倒敘時間法 (計畫) -->
+      <div class="card-item" data-cat="plan" data-index="9">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-7.jpg" alt="倒敘時間法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">倒敘時間法</div>
+          <span class="card-cat-badge plan">計畫 🗺️</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_14.jpg" alt="主動閱讀法">
+
+      <!-- 11: 當下掃描法 (自我監控) -->
+      <div class="card-item" data-cat="selfmonitor" data-index="10">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-8.jpg" alt="當下掃描法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">當下掃描法</div>
+          <span class="card-cat-badge selfmonitor">自我監控 🪞</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_13.jpg" alt="視覺遮蔽法">
-      </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_12.jpg" alt="單一任務法">
-      </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_11.jpg" alt="計時工作法">
-      </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_10.jpg" alt="分聲專注法">
-      </div>
-      <div class="card" data-category="attention">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_8.jpg" alt="感官重置法">
-      </div>
-      <!-- ===== 工作記憶（金） ===== -->
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_9.jpg" alt="感官重置法">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_7.jpg" alt="白話教學法">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_6.jpg" alt="首字縮寫法">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_5.jpg" alt="記憶宮殿法">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_4.jpg" alt="分塊記憶">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_3.jpg" alt="樹狀整理法">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_2.jpg" alt="N-back 訓練法">
-      </div>
-      <div class="card" data-category="workmemory">
-        <img class="card-img" src="card_png/LINE_ALBUM_202665_260605_1.jpg" alt="諧音故事法">
+
+      <!-- 12: 錯誤定位法 (自我監控) -->
+      <div class="card-item" data-cat="selfmonitor" data-index="11">
+        <div class="card-img-wrap">
+          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-9.jpg" alt="錯誤定位法">
+        </div>
+        <div class="card-meta">
+          <div class="card-title-label">錯誤定位法</div>
+          <span class="card-cat-badge selfmonitor">自我監控 🪞</span>
+        </div>
+        <div class="card-click-hint">
+          <span>點開 3D 檢視與閃光</span> <span>→</span>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- 3D INTERACTIVE CARD LIGHTBOX MODAL -->
+  <div class="modal-overlay" id="cardModal">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="modalClose">✕</button>
+
+      <!-- 3D CARD DISPLAY STAGE -->
+      <div class="modal-stage">
+        <div class="card-3d-box" id="modal3dCard">
+          <div class="card-face front">
+            <img id="modalCardImg" src="" alt="">
+          </div>
+          <div class="card-face back">
+            <div class="card-back-pattern"></div>
+            <div class="card-back-emblem">🧠</div>
+            <div class="card-back-title">深耕計畫</div>
+            <div style="font-size:0.9rem; font-weight:800; color:#FFF; margin-bottom:0.8rem;">執行功能心智訓練卡牌</div>
+            <p class="card-back-sub">
+              林口長庚兒童心智科 × 衛生福利部<br>
+              青少年大腦指揮官系統 2.0
+            </p>
+          </div>
+        </div>
+
+        <div class="stage-controls">
+          <button class="stage-btn" id="flipBtn">🔄 翻轉卡背</button>
+          <button class="stage-btn" id="spinBtn">✨ 360° 閃光旋轉</button>
+        </div>
+      </div>
+
+      <!-- CARD DETAILS & ACTION TIPS -->
+      <div class="modal-details">
+        <div class="modal-tag-row" id="modalTags">
+          <!-- Dynamic badges -->
+        </div>
+
+        <h3 class="modal-card-name" id="modalCardName">卡牌名稱</h3>
+
+        <div class="modal-desc-box">
+          <div class="modal-desc-title">📖 卡牌引導核心：</div>
+          <p class="modal-desc-text" id="modalCardDesc">卡牌引導內容載入中...</p>
+        </div>
+
+        <div class="modal-tip-box">
+          <div class="modal-tip-title">💡 臨床訓練建議策略：</div>
+          <div class="modal-tip-text" id="modalCardTip">策略引導說明載入中...</div>
+        </div>
+
+        <div class="modal-nav-row">
+          <button class="modal-nav-btn" id="prevCardBtn">← 上一張</button>
+          <span style="font-size: 0.82rem; font-weight: 800; color: var(--text-secondary);" id="modalCounter">1 / 12</span>
+          <button class="modal-nav-btn" id="nextCardBtn">下一張 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <p>深耕台灣計畫 — 執行功能訓練卡牌 ｜ 林口長庚兒童心智科 × 衛生福利部</p>
+  <footer class="footer" id="about">
+    <div class="footer-hazard"></div>
+    <div class="footer-brand">深耕台灣計畫 — 執行功能訓練卡牌系統 2.0</div>
+    <p style="margin-bottom: 0.6rem;">指導單位：衛生福利部 ｜ 研發與主辦單位：林口長庚醫院 兒童心智科</p>
+    <p style="font-size: 0.8rem; opacity: 0.7;">
+      🚧 網站平台目前正在進行 2.0 系統改版與建置，更多訓練教案與互動功能即將陸續推出，敬請期待！
+    </p>
   </footer>
 
+  <!-- SCRIPT -->
   <script>
-    const tabs = document.querySelectorAll('.tab-btn');
-    const cards = document.querySelectorAll('.card');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const filter = tab.dataset.filter;
-        cards.forEach(card => {
-          if (filter === 'all' || card.dataset.category === filter) {
-            card.classList.remove('hidden');
+    // 12 CARDS METADATA (NEWCARD EXACT CONTENT)
+    const CARD_DATA = [
+      {
+        id: 0,
+        title: "再想一下法",
+        category: "inhibit",
+        categoryName: "抑制控制",
+        categoryColor: "var(--c-inhibit)",
+        categoryEmoji: "🛑",
+        img: "newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C.jpg",
+        tags: ["抑制 🛑", "注意力 🔦", "工作記憶 📋"],
+        desc: "當你做事時，突然想到別的事情，或是有衝動行為時，可以讓自己多想一下。",
+        tip: "在衝動行動或脫口而出前，給自己設定 3 秒『煞車緩衝期』，讓大腦的理性前額葉接管決策。"
+      },
+      {
+        id: 1,
+        title: "想法放下法",
+        category: "inhibit",
+        categoryName: "抑制控制",
+        categoryColor: "var(--c-inhibit)",
+        categoryEmoji: "🛑",
+        img: "newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-2.jpg",
+        tags: ["抑制 🛑", "工作記憶 📋", "自我監控 🪞"],
+        desc: "當腦中一直重播剛剛發生的事，或一直想著還沒發生的事時，不需要一直跟著想。提醒自己：「等等再想，先做好眼前這件事。」",
+        tip: "準備一張便條紙當作『想法收容所』，把胡思亂想的關鍵字寫下來，告訴大腦『我已經記下來了，現在先專注眼前』。"
+      },
+      {
+        id: 2,
+        title: "目標鎖定法",
+        category: "attention",
+        categoryName: "注意力",
+        categoryColor: "var(--c-attention)",
+        categoryEmoji: "🔦",
+        img: "newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-3.jpg",
+        tags: ["注意力 🔦", "抑制 🛑"],
+        desc: "當多種資訊同時出現時，先確認自己的目標，主動將注意力放在重要資訊上，避免被無關訊息吸引。",
+        tip: "像手電筒一樣把光束縮小，一次只看一題題目或一行字，其餘不相關的畫面用手或紙先遮蔽。"
+      },
+      {
+        id: 3,
+        title: "線索搜查法",
+        category: "attention",
+        categoryName: "注意力",
+        categoryColor: "var(--c-attention)",
+        categoryEmoji: "🔦",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83.jpg",
+        tags: ["注意力 🔦", "抑制 🛑", "工作記憶 📋", "計畫 🗺️"],
+        desc: "先記住目標特徵，再依照固定順序搜尋整個環境，直到找到正確目標。",
+        tip: "建立地毯式搜索習慣（如由左至右、由上而下），避免眼球毫無章法地隨機亂跳而遺漏關鍵訊息。"
+      },
+      {
+        id: 4,
+        title: "動態替換法",
+        category: "workmemory",
+        categoryName: "工作記憶",
+        categoryColor: "var(--c-workmemory)",
+        categoryEmoji: "📋",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-2.jpg",
+        tags: ["工作記憶 📋", "認知彈性 ⚙️", "自我監控 🪞"],
+        desc: "練習快速把最新的重要資訊放進工作記憶，讓自己始終掌握「最新版本」。",
+        tip: "舊資訊使用完畢後主動在大腦中打勾清除，騰出記憶工作檯，隨時更新即時指令與數值。"
+      },
+      {
+        id: 5,
+        title: "心算暫存法",
+        category: "workmemory",
+        categoryName: "工作記憶",
+        categoryColor: "var(--c-workmemory)",
+        categoryEmoji: "📋",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-3.jpg",
+        tags: ["工作記憶 📋", "注意力 🔦"],
+        desc: "在心中暫時記住數字、中間結果和運算步驟，一邊保留資訊，一邊完成思考與計算。",
+        tip: "在腦海中想像一塊小黑板，將計算到一半的中間數字寫在黑板中央，再繼續下一階段運算。"
+      },
+      {
+        id: 6,
+        title: "備案開箱法",
+        category: "cognitive",
+        categoryName: "認知彈性",
+        categoryColor: "var(--c-cognitive)",
+        categoryEmoji: "⚙️",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg",
+        tags: ["認知彈性 ⚙️", "注意力 🔦", "抑制 🛑", "工作記憶 📋"],
+        desc: "當原來的方法卡住時，先想出至少兩個不同做法，不急著認定只有一條路。",
+        tip: "遇到困難時別急著慌張，告訴自己『這條路封路了，來開箱 Plan B 與 Plan C』，快速切換解題路徑。"
+      },
+      {
+        id: 7,
+        title: "角色借用法",
+        category: "cognitive",
+        categoryName: "認知彈性",
+        categoryColor: "var(--c-cognitive)",
+        categoryEmoji: "⚙️",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg",
+        tags: ["認知彈性 ⚙️", "自我監控 🪞"],
+        desc: "腦袋當機時，跳脫「我」的視角，假裝自己是你最佩服的人，用他的思維模式來重新定義問題。",
+        tip: "問問自己：『如果是偵探福爾摩斯或我最喜歡的老師，他在這個情況下會怎麼看這件事？』"
+      },
+      {
+        id: 8,
+        title: "第一小步法",
+        category: "plan",
+        categoryName: "計畫組織",
+        categoryColor: "var(--c-plan)",
+        categoryEmoji: "🗺️",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-6.jpg",
+        tags: ["計畫 🗺️", "注意力 🔦", "抑制 🛑", "工作記憶 📋"],
+        desc: "找出現在就能開始的最小動作。",
+        tip: "任務太龐大不想動？只要找出『2 分鐘內就能立刻完成的第一個微小動作』（如打開課本第一頁），就能輕鬆破除拖延！"
+      },
+      {
+        id: 9,
+        title: "倒敘時間法",
+        category: "plan",
+        categoryName: "計畫組織",
+        categoryColor: "var(--c-plan)",
+        categoryEmoji: "🗺️",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-7.jpg",
+        tags: ["計畫 🗺️", "工作記憶 📋", "認知彈性 ⚙️"],
+        desc: "把最後期限當作起點，從終點「往回推算」每一天的前置任務，用倒敘法幫自己畫出一張清晰的行動藍圖。",
+        tip: "以繳交日前一天作為安全終點線，往前回推檢查時間、製作時間、準備材料時間，排出從容的節奏。"
+      },
+      {
+        id: 10,
+        title: "當下掃描法",
+        category: "selfmonitor",
+        categoryName: "自我監控",
+        categoryColor: "var(--c-selfmonitor)",
+        categoryEmoji: "🪞",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-8.jpg",
+        tags: ["自我監控 🪞", "注意力 🔦", "工作記憶 📋"],
+        desc: "在活動進行一段時間後，快速注意自己目前的想法、行為和情緒，確認自己現在究竟在做什麼。",
+        tip: "每隔一段時間進行一次心智雷達掃描：『我現在有沒有分心？我的進度到哪裡了？我現在的情緒如何？』"
+      },
+      {
+        id: 11,
+        title: "錯誤定位法",
+        category: "selfmonitor",
+        categoryName: "自我監控",
+        categoryColor: "var(--c-selfmonitor)",
+        categoryEmoji: "🪞",
+        img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-9.jpg",
+        tags: ["自我監控 🪞", "注意力 🔦", "抑制 🛑", "計畫 🗺️"],
+        desc: "偵測錯誤並判斷錯誤來源，而非只注意結果是否正確。",
+        tip: "錯了不沮喪，當作系統偵錯：『是看錯題目？粗心抄錯？還是概念還不清楚？』找到真正的 Bug 才能對症下藥。"
+      }
+    ];
+
+    // FILTER FUNCTIONALITY
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cardItems = document.querySelectorAll('.card-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+
+        cardItems.forEach(item => {
+          if (cat === 'all' || item.dataset.cat === cat) {
+            item.classList.remove('hidden');
           } else {
-            card.classList.add('hidden');
+            item.classList.add('hidden');
           }
         });
       });
     });
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // 3D TILT & HOLO SHINE ON HOVER
+    cardItems.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -12;
+        const rotateY = ((x - centerX) / centerX) * 12;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
       });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    // MODAL & 3D INTERACTION LOGIC
+    const modal = document.getElementById('cardModal');
+    const modalClose = document.getElementById('modalClose');
+    const modal3dCard = document.getElementById('modal3dCard');
+    const modalCardImg = document.getElementById('modalCardImg');
+    const modalCardName = document.getElementById('modalCardName');
+    const modalCardDesc = document.getElementById('modalCardDesc');
+    const modalCardTip = document.getElementById('modalCardTip');
+    const modalTags = document.getElementById('modalTags');
+    const modalCounter = document.getElementById('modalCounter');
+    const flipBtn = document.getElementById('flipBtn');
+    const spinBtn = document.getElementById('spinBtn');
+    const prevCardBtn = document.getElementById('prevCardBtn');
+    const nextCardBtn = document.getElementById('nextCardBtn');
+
+    let currentCardIndex = 0;
+    let isFlipped = false;
+    let isSpinning = false;
+
+    function renderModalCard(index) {
+      currentCardIndex = (index + CARD_DATA.length) % CARD_DATA.length;
+      const data = CARD_DATA[currentCardIndex];
+
+      modalCardImg.src = data.img;
+      modalCardImg.alt = data.title;
+      modalCardName.textContent = data.title;
+      modalCardDesc.textContent = data.desc;
+      modalCardTip.textContent = data.tip;
+      modalCounter.textContent = `${currentCardIndex + 1} / ${CARD_DATA.length}`;
+
+      // Reset transforms
+      isFlipped = false;
+      modal3dCard.classList.remove('flipped');
+      isSpinning = false;
+      modal3dCard.classList.remove('spin-animation');
+      spinBtn.textContent = "✨ 360° 閃光旋轉";
+
+      // Render tags
+      modalTags.innerHTML = `
+        <span class="modal-cat-tag" style="background:${data.categoryColor}">
+          ${data.categoryName} ${data.categoryEmoji}
+        </span>
+      ` + data.tags.map(t => `<span class="modal-sub-tag">${t}</span>`).join('');
+    }
+
+    // Open Modal
+    cardItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const idx = parseInt(item.dataset.index, 10);
+        renderModalCard(idx);
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close Modal
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      isSpinning = false;
+      modal3dCard.classList.remove('spin-animation');
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Flip Card
+    flipBtn.addEventListener('click', () => {
+      isFlipped = !isFlipped;
+      modal3dCard.classList.toggle('flipped', isFlipped);
+    });
+
+    // Spin Card
+    spinBtn.addEventListener('click', () => {
+      isSpinning = !isSpinning;
+      modal3dCard.classList.toggle('spin-animation', isSpinning);
+      spinBtn.textContent = isSpinning ? "⏹️ 停止旋轉" : "✨ 360° 閃光旋轉";
+    });
+
+    // Next / Prev Card
+    prevCardBtn.addEventListener('click', () => renderModalCard(currentCardIndex - 1));
+    nextCardBtn.addEventListener('click', () => renderModalCard(currentCardIndex + 1));
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') renderModalCard(currentCardIndex - 1);
+      if (e.key === 'ArrowRight') renderModalCard(currentCardIndex + 1);
+      if (e.key === ' ' || e.key === 'f') {
+        e.preventDefault();
+        flipBtn.click();
+      }
     });
   </script>
 </body>
