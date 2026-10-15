@@ -9,12 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --c-inhibit: #FF4D4D;
-      --c-selfmonitor: #A855F7;
-      --c-attention: #F5B800;
-      --c-cognitive: #FF7A29;
-      --c-plan: #208AE6;
-      --c-workmemory: #6CBF3A;
+      --c-inhibit: #FF3131;
+      --c-selfmonitor: #8C52FF;
+      --c-attention: #FFDE59;
+      --c-cognitive: #FF914D;
+      --c-plan: #38B6FF;
+      --c-workmemory: #7ED957;
       --bg: #FDF9F2;
       --card-bg: #FFFFFF;
       --text: #232128;
@@ -426,28 +426,27 @@
     .fn-icon-box {
       width: 56px;
       height: 56px;
-      border-radius: 50%;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #FAFAFA;
-      border: 2.5px solid #222222;
-      overflow: hidden;
       flex-shrink: 0;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+      background: #fff;
+      border: 2px dashed #DDD;
+      overflow: hidden;
     }
     .fn-icon-box img {
       width: 32px;
       height: 32px;
       object-fit: contain;
-      filter: none !important;
+      filter: none;
     }
-    .fn-card.inhibit .fn-icon-box { background: #FFD6D6; border-color: #222222; }
-    .fn-card.attention .fn-icon-box { background: #FFF0A8; border-color: #222222; }
-    .fn-card.workmemory .fn-icon-box { background: #D6F5C4; border-color: #222222; }
-    .fn-card.cognitive .fn-icon-box { background: #FFE0C7; border-color: #222222; }
-    .fn-card.plan .fn-icon-box { background: #CFE9FC; border-color: #222222; }
-    .fn-card.selfmonitor .fn-icon-box { background: #EBD3FC; border-color: #222222; }
+    .fn-card.inhibit .fn-icon-box { background: var(--c-inhibit); border-color: #E02020; }
+    .fn-card.selfmonitor .fn-icon-box { background: var(--c-selfmonitor); border-color: #7A3FE0; }
+    .fn-card.attention .fn-icon-box { background: var(--c-attention); border-color: #E8C830; }
+    .fn-card.cognitive .fn-icon-box { background: var(--c-cognitive); border-color: #E07A30; }
+    .fn-card.plan .fn-icon-box { background: var(--c-plan); border-color: #2090E0; }
+    .fn-card.workmemory .fn-icon-box { background: var(--c-workmemory); border-color: #E0C030; }
 
     .fn-title {
       font-size: 1.15rem;
@@ -1075,11 +1074,11 @@
         <div class="fn-card-top">
           <div class="fn-icon-box"><img src="icon_package/抑制.png?v=20261016" alt="抑制"></div>
           <div>
-            <div class="fn-title">抑制控制</div>
-            <span class="fn-metaphor">🛑 大腦的煞車盾牌</span>
+            <div class="fn-title">抑制</div>
+            <span class="fn-metaphor">大腦的盾牌</span>
           </div>
         </div>
-        <p class="fn-desc">控制衝動、暫停反應，讓你在行動前先思考三秒，不被一時誘惑或情緒牽著走。</p>
+        <p class="fn-desc">控制衝動、暫停反應，讓你在行動前先思考，不被誘惑左右。</p>
       </div>
 
       <!-- 注意力 -->
@@ -1087,11 +1086,11 @@
         <div class="fn-card-top">
           <div class="fn-icon-box"><img src="icon_package/注意力.png?v=20261016" alt="注意力"></div>
           <div>
-            <div class="fn-title">注意力分配</div>
-            <span class="fn-metaphor">🔦 大腦的手電筒</span>
+            <div class="fn-title">注意力</div>
+            <span class="fn-metaphor">大腦的手電筒</span>
           </div>
         </div>
-        <p class="fn-desc">過濾背景雜訊與干擾，將焦點精準鎖定在關鍵任務，長時間持續專注投入。</p>
+        <p class="fn-desc">過濾掉干擾，將焦點保持在當下的任務上，並能長時間持續投入。</p>
       </div>
 
       <!-- 工作記憶 -->
@@ -1100,10 +1099,10 @@
           <div class="fn-icon-box"><img src="icon_package/工作記憶.png?v=20261016" alt="工作記憶"></div>
           <div>
             <div class="fn-title">工作記憶</div>
-            <span class="fn-metaphor">📋 大腦的工作桌面</span>
+            <span class="fn-metaphor">大腦的工作臺</span>
           </div>
         </div>
-        <p class="fn-desc">把當下需要的步驟、數字與條件暫時放在心智桌面上，並在思考中靈活調度運用。</p>
+        <p class="fn-desc">像是大腦的工作臺，讓你把資訊放在桌上，並運用它們來處理問題。</p>
       </div>
 
       <!-- 認知彈性 -->
@@ -1112,10 +1111,10 @@
           <div class="fn-icon-box"><img src="icon_package/認知彈性.png?v=20261016" alt="認知彈性"></div>
           <div>
             <div class="fn-title">認知彈性</div>
-            <span class="fn-metaphor">⚙️ 大腦的變速齒輪</span>
+            <span class="fn-metaphor">大腦的變速器</span>
           </div>
         </div>
-        <p class="fn-desc">遇上瓶頸或突發狀況時，能快速切換不同視角與方案，不死鑽牛角尖。</p>
+        <p class="fn-desc">靈活切換思考，當原定計畫行不通時，能快速找出解決方案。</p>
       </div>
 
       <!-- 計畫 -->
@@ -1123,11 +1122,11 @@
         <div class="fn-card-top">
           <div class="fn-icon-box"><img src="icon_package/計畫.png?v=20261016" alt="計畫"></div>
           <div>
-            <div class="fn-title">組織與計畫</div>
-            <span class="fn-metaphor">🗺️ 大腦的作戰地圖</span>
+            <div class="fn-title">計畫</div>
+            <span class="fn-metaphor">大腦的戰情室</span>
           </div>
         </div>
-        <p class="fn-desc">為複雜目標拆解具體步驟，從終點倒推時程，畫出清晰且能踏實執行的藍圖。</p>
+        <p class="fn-desc">為達成目標拆解步驟，並預先設想好執行的順序與資源。</p>
       </div>
 
       <!-- 自我監控 -->
@@ -1136,10 +1135,10 @@
           <div class="fn-icon-box"><img src="icon_package/自我監控.png?v=20261016" alt="自我監控"></div>
           <div>
             <div class="fn-title">自我監控</div>
-            <span class="fn-metaphor">🪞 大腦的即時鏡子</span>
+            <span class="fn-metaphor">大腦的眼睛</span>
           </div>
         </div>
-        <p class="fn-desc">在進行任務中隨時檢視自身狀態與進度，及時偵測盲點與錯誤並校正方向。</p>
+        <p class="fn-desc">檢視自己的表現與狀態，隨時調整做法，確保達成目標。</p>
       </div>
     </div>
   </section>
