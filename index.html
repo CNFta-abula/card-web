@@ -535,15 +535,14 @@
       padding: 0.9rem;
       cursor: pointer;
       position: relative;
-      transition: transform 0.15s ease-out, box-shadow 0.25s ease, border-color 0.25s ease;
-      transform-style: preserve-3d;
-      will-change: transform;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.25s ease;
       box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
       user-select: none;
     }
     .card-item:hover {
+      transform: translateY(-8px) scale(1.05);
       border-color: var(--text);
-      box-shadow: 8px 12px 24px rgba(0,0,0,0.12);
+      box-shadow: 8px 18px 30px rgba(0,0,0,0.16);
     }
     .card-item.hidden { display: none; }
 
@@ -564,30 +563,62 @@
         transparent 80%
       );
       mix-blend-mode: overlay;
-      z-index: 5;
+      z-index: 10;
     }
     .card-item:hover::after {
       opacity: 1;
     }
 
-    .card-img-wrap {
+    /* 3D CARD WRAPPER & FLIPPER FOR GRID HOVER */
+    .card-3d-wrap {
+      width: 100%;
+      aspect-ratio: 709 / 1075;
+      perspective: 1000px;
+      border-radius: 16px;
+      position: relative;
+    }
+    .card-3d-flipper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      border-radius: 16px;
+      transition: transform 0.5s ease;
+    }
+    .card-item:hover .card-3d-flipper {
+      animation: gridCardSpin 4s linear infinite;
+    }
+    @keyframes gridCardSpin {
+      0% {
+        transform: rotateY(0deg);
+      }
+      100% {
+        transform: rotateY(360deg);
+      }
+    }
+
+    .card-3d-face {
+      position: absolute;
+      inset: 0;
       border-radius: 16px;
       overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       background: #FAF8F5;
       border: 1.5px solid #EBE4D8;
-      position: relative;
-      aspect-ratio: 709 / 1075;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
-    .card-img-wrap img {
+    .card-3d-face img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.4s ease;
     }
-    .card-item:hover .card-img-wrap img {
-      transform: scale(1.025);
+    .card-3d-face.front {
+      transform: rotateY(0deg);
+    }
+    .card-3d-face.back {
+      transform: rotateY(180deg);
     }
 
     .card-meta {
@@ -727,7 +758,7 @@
       transform: rotateY(180deg);
     }
     .card-3d-box.spin-animation {
-      animation: autoSpin 12s linear infinite;
+      animation: autoSpin 10s linear infinite;
     }
     @keyframes autoSpin {
       0% { transform: rotateY(0deg); }
@@ -743,49 +774,20 @@
       -webkit-backface-visibility: hidden;
       border: 3px solid #FFFFFF;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      background: #FFF;
+      background: #FAF8F5;
     }
-    .card-face.front img {
+    .card-face img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
+    .card-face.front {
+      transform: rotateY(0deg);
+    }
     .card-face.back {
       transform: rotateY(180deg);
-      background: linear-gradient(135deg, #2D283E 0%, #17151F 100%);
-      color: #FFF;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      text-align: center;
-      border: 3px solid #FFD028;
-    }
-    .card-back-pattern {
-      position: absolute;
-      inset: 8px;
-      border: 2px dashed rgba(255, 208, 40, 0.4);
-      border-radius: 14px;
-      pointer-events: none;
-    }
-    .card-back-emblem {
-      font-size: 3rem;
-      margin-bottom: 0.8rem;
-      filter: drop-shadow(0 0 12px rgba(255, 208, 40, 0.5));
-    }
-    .card-back-title {
-      font-size: 1.15rem;
-      font-weight: 900;
-      color: #FFD028;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.4rem;
-    }
-    .card-back-sub {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.6;
+      background: #FAF8F5;
     }
 
     /* FLIP & ROTATE CONTROLS */
@@ -1096,7 +1098,7 @@
   <section class="section" id="cards">
     <div class="section-header">
       <h2 class="section-title">卡牌總覽</h2>
-      <p class="section-desc">點擊卡牌可 3D 翻轉查看卡背與訓練引導</p>
+      <p class="section-desc">滑鼠懸停即可放大 3D 旋轉預覽卡背，點擊卡牌開啟完整訓練引導</p>
     </div>
 
     <!-- FILTER TABS -->
@@ -1114,169 +1116,253 @@
     <div class="cards-grid" id="cardsGrid">
       <!-- 1: 再想一下法 (抑制) -->
       <div class="card-item" data-cat="inhibit" data-index="0">
-        <div class="card-img-wrap">
-          <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C.jpg" alt="再想一下法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C.jpg" alt="再想一下法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E7%B4%85%E8%89%B2.png" alt="抑制卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">再想一下法</div>
           <span class="card-cat-badge inhibit">抑制 🛑</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 2: 想法放下法 (抑制) -->
       <div class="card-item" data-cat="inhibit" data-index="1">
-        <div class="card-img-wrap">
-          <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-2.jpg" alt="想法放下法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-2.jpg" alt="想法放下法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E7%B4%85%E8%89%B2.png" alt="抑制卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">想法放下法</div>
           <span class="card-cat-badge inhibit">抑制 🛑</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 3: 目標鎖定法 (注意力) -->
       <div class="card-item" data-cat="attention" data-index="2">
-        <div class="card-img-wrap">
-          <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-3.jpg" alt="目標鎖定法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-3.jpg" alt="目標鎖定法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E9%BB%83%E8%89%B2.png" alt="注意力卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">目標鎖定法</div>
           <span class="card-cat-badge attention">注意力 🔦</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 4: 線索搜查法 (注意力) -->
       <div class="card-item" data-cat="attention" data-index="3">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83.jpg" alt="線索搜查法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83.jpg" alt="線索搜查法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E9%BB%83%E8%89%B2.png" alt="注意力卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">線索搜查法</div>
           <span class="card-cat-badge attention">注意力 🔦</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 5: 動態替換法 (工作記憶) -->
       <div class="card-item" data-cat="workmemory" data-index="4">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-2.jpg" alt="動態替換法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-2.jpg" alt="動態替換法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E7%B6%A0%E8%89%B2.png" alt="工作記憶卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">動態替換法</div>
           <span class="card-cat-badge workmemory">工作記憶 📋</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 6: 心算暫存法 (工作記憶) -->
       <div class="card-item" data-cat="workmemory" data-index="5">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-3.jpg" alt="心算暫存法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-3.jpg" alt="心算暫存法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E7%B6%A0%E8%89%B2.png" alt="工作記憶卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">心算暫存法</div>
           <span class="card-cat-badge workmemory">工作記憶 📋</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 7: 備案開箱法 (認知彈性) -->
       <div class="card-item" data-cat="cognitive" data-index="6">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg" alt="備案開箱法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg" alt="備案開箱法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E6%A9%98%E8%89%B2.png" alt="認知彈性卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">備案開箱法</div>
           <span class="card-cat-badge cognitive">認知彈性 ⚙️</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 8: 角色借用法 (認知彈性) -->
       <div class="card-item" data-cat="cognitive" data-index="7">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg" alt="角色借用法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg" alt="角色借用法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E6%A9%98%E8%89%B2.png" alt="認知彈性卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">角色借用法</div>
           <span class="card-cat-badge cognitive">認知彈性 ⚙️</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 9: 第一小步法 (計畫) -->
       <div class="card-item" data-cat="plan" data-index="8">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-6.jpg" alt="第一小步法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-6.jpg" alt="第一小步法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E8%97%8D%E8%89%B2.png" alt="計畫卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">第一小步法</div>
           <span class="card-cat-badge plan">計畫 🗺️</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 10: 倒敘時間法 (計畫) -->
       <div class="card-item" data-cat="plan" data-index="9">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-7.jpg" alt="倒敘時間法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-7.jpg" alt="倒敘時間法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E8%97%8D%E8%89%B2.png" alt="計畫卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">倒敘時間法</div>
           <span class="card-cat-badge plan">計畫 🗺️</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 11: 當下掃描法 (自我監控) -->
       <div class="card-item" data-cat="selfmonitor" data-index="10">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-8.jpg" alt="當下掃描法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-8.jpg" alt="當下掃描法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E7%B4%AB%E8%89%B2.png" alt="自我監控卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">當下掃描法</div>
           <span class="card-cat-badge selfmonitor">自我監控 🪞</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
       <!-- 12: 錯誤定位法 (自我監控) -->
       <div class="card-item" data-cat="selfmonitor" data-index="11">
-        <div class="card-img-wrap">
-          <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-9.jpg" alt="錯誤定位法">
+        <div class="card-3d-wrap">
+          <div class="card-3d-flipper">
+            <div class="card-3d-face front">
+              <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-9.jpg" alt="錯誤定位法">
+            </div>
+            <div class="card-3d-face back">
+              <img src="卡背/%E7%B4%AB%E8%89%B2.png" alt="自我監控卡背">
+            </div>
+          </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">錯誤定位法</div>
           <span class="card-cat-badge selfmonitor">自我監控 🪞</span>
         </div>
         <div class="card-click-hint">
-          <span>點擊查看</span> <span>→</span>
+          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
     </div>
@@ -1289,25 +1375,18 @@
 
       <!-- 3D CARD DISPLAY STAGE -->
       <div class="modal-stage">
-        <div class="card-3d-box" id="modal3dCard">
+        <div class="card-3d-box spin-animation" id="modal3dCard">
           <div class="card-face front">
-            <img id="modalCardImg" src="" alt="">
+            <img id="modalCardImg" src="" alt="卡牌正面">
           </div>
           <div class="card-face back">
-            <div class="card-back-pattern"></div>
-            <div class="card-back-emblem">🧠</div>
-            <div class="card-back-title">深耕計畫</div>
-            <div style="font-size:0.9rem; font-weight:800; color:#FFF; margin-bottom:0.8rem;">執行功能心智訓練卡牌</div>
-            <p class="card-back-sub">
-              林口長庚兒童心智科 × 衛生福利部<br>
-              青少年大腦指揮官系統 2.0
-            </p>
+            <img id="modalCardBackImg" src="" alt="卡牌背面">
           </div>
         </div>
 
         <div class="stage-controls">
           <button class="stage-btn" id="flipBtn">🔄 翻轉卡背</button>
-          <button class="stage-btn" id="spinBtn">✨ 360° 閃光旋轉</button>
+          <button class="stage-btn" id="spinBtn">⏹️ 暫停旋轉</button>
         </div>
       </div>
 
@@ -1350,7 +1429,7 @@
 
   <!-- SCRIPT -->
   <script>
-    // 12 CARDS METADATA (NEWCARD EXACT CONTENT)
+    // 12 CARDS METADATA (NEWCARD EXACT CONTENT + PAIRED CARD BACKS)
     const CARD_DATA = [
       {
         id: 0,
@@ -1360,6 +1439,7 @@
         categoryColor: "var(--c-inhibit)",
         categoryEmoji: "🛑",
         img: "newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C.jpg",
+        backImg: "卡背/%E7%B4%85%E8%89%B2.png",
         tags: ["抑制 🛑", "注意力 🔦", "工作記憶 📋"],
         desc: "當你做事時，突然想到別的事情，或是有衝動行為時，可以讓自己多想一下。",
         tip: "在衝動行動或脫口而出前，給自己設定 3 秒『煞車緩衝期』，讓大腦的理性前額葉接管決策。"
@@ -1372,6 +1452,7 @@
         categoryColor: "var(--c-inhibit)",
         categoryEmoji: "🛑",
         img: "newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-2.jpg",
+        backImg: "卡背/%E7%B4%85%E8%89%B2.png",
         tags: ["抑制 🛑", "工作記憶 📋", "自我監控 🪞"],
         desc: "當腦中一直重播剛剛發生的事，或一直想著還沒發生的事時，不需要一直跟著想。提醒自己：「等等再想，先做好眼前這件事。」",
         tip: "準備一張便條紙當作『想法收容所』，把胡思亂想的關鍵字寫下來，告訴大腦『我已經記下來了，現在先專注眼前』。"
@@ -1384,6 +1465,7 @@
         categoryColor: "var(--c-attention)",
         categoryEmoji: "🔦",
         img: "newcard/0916%20%E6%9C%80%E7%B5%82%E7%89%88%E5%8D%A1%E7%89%8C-3.jpg",
+        backImg: "卡背/%E9%BB%83%E8%89%B2.png",
         tags: ["注意力 🔦", "抑制 🛑"],
         desc: "當多種資訊同時出現時，先確認自己的目標，主動將注意力放在重要資訊上，避免被無關訊息吸引。",
         tip: "像手電筒一樣把光束縮小，一次只看一題題目或一行字，其餘不相關的畫面用手或紙先遮蔽。"
@@ -1396,6 +1478,7 @@
         categoryColor: "var(--c-attention)",
         categoryEmoji: "🔦",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83.jpg",
+        backImg: "卡背/%E9%BB%83%E8%89%B2.png",
         tags: ["注意力 🔦", "抑制 🛑", "工作記憶 📋", "計畫 🗺️"],
         desc: "先記住目標特徵，再依照固定順序搜尋整個環境，直到找到正確目標。",
         tip: "建立地毯式搜索習慣（如由左至右、由上而下），避免眼球毫無章法地隨機亂跳而遺漏關鍵訊息。"
@@ -1408,6 +1491,7 @@
         categoryColor: "var(--c-workmemory)",
         categoryEmoji: "📋",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-2.jpg",
+        backImg: "卡背/%E7%B6%A0%E8%89%B2.png",
         tags: ["工作記憶 📋", "認知彈性 ⚙️", "自我監控 🪞"],
         desc: "練習快速把最新的重要資訊放進工作記憶，讓自己始終掌握「最新版本」。",
         tip: "舊資訊使用完畢後主動在大腦中打勾清除，騰出記憶工作檯，隨時更新即時指令與數值。"
@@ -1420,6 +1504,7 @@
         categoryColor: "var(--c-workmemory)",
         categoryEmoji: "📋",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-3.jpg",
+        backImg: "卡背/%E7%B6%A0%E8%89%B2.png",
         tags: ["工作記憶 📋", "注意力 🔦"],
         desc: "在心中暫時記住數字、中間結果和運算步驟，一邊保留資訊，一邊完成思考與計算。",
         tip: "在腦海中想像一塊小黑板，將計算到一半的中間數字寫在黑板中央，再繼續下一階段運算。"
@@ -1432,6 +1517,7 @@
         categoryColor: "var(--c-cognitive)",
         categoryEmoji: "⚙️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg",
+        backImg: "卡背/%E6%A9%98%E8%89%B2.png",
         tags: ["認知彈性 ⚙️", "注意力 🔦", "抑制 🛑", "工作記憶 📋"],
         desc: "當原來的方法卡住時，先想出至少兩個不同做法，不急著認定只有一條路。",
         tip: "遇到困難時別急著慌張，告訴自己『這條路封路了，來開箱 Plan B 與 Plan C』，快速切換解題路徑。"
@@ -1444,6 +1530,7 @@
         categoryColor: "var(--c-cognitive)",
         categoryEmoji: "⚙️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg",
+        backImg: "卡背/%E6%A9%98%E8%89%B2.png",
         tags: ["認知彈性 ⚙️", "自我監控 🪞"],
         desc: "腦袋當機時，跳脫「我」的視角，假裝自己是你最佩服的人，用他的思維模式來重新定義問題。",
         tip: "問問自己：『如果是偵探福爾摩斯或我最喜歡的老師，他在這個情況下會怎麼看這件事？』"
@@ -1456,6 +1543,7 @@
         categoryColor: "var(--c-plan)",
         categoryEmoji: "🗺️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-6.jpg",
+        backImg: "卡背/%E8%97%8D%E8%89%B2.png",
         tags: ["計畫 🗺️", "注意力 🔦", "抑制 🛑", "工作記憶 📋"],
         desc: "找出現在就能開始的最小動作。",
         tip: "任務太龐大不想動？只要找出『2 分鐘內就能立刻完成的第一個微小動作』（如打開課本第一頁），就能輕鬆破除拖延！"
@@ -1468,6 +1556,7 @@
         categoryColor: "var(--c-plan)",
         categoryEmoji: "🗺️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-7.jpg",
+        backImg: "卡背/%E8%97%8D%E8%89%B2.png",
         tags: ["計畫 🗺️", "工作記憶 📋", "認知彈性 ⚙️"],
         desc: "把最後期限當作起點，從終點「往回推算」每一天的前置任務，用倒敘法幫自己畫出一張清晰的行動藍圖。",
         tip: "以繳交日前一天作為安全終點線，往前回推檢查時間、製作時間、準備材料時間，排出從容的節奏。"
@@ -1480,6 +1569,7 @@
         categoryColor: "var(--c-selfmonitor)",
         categoryEmoji: "🪞",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-8.jpg",
+        backImg: "卡背/%E7%B4%AB%E8%89%B2.png",
         tags: ["自我監控 🪞", "注意力 🔦", "工作記憶 📋"],
         desc: "在活動進行一段時間後，快速注意自己目前的想法、行為和情緒，確認自己現在究竟在做什麼。",
         tip: "每隔一段時間進行一次心智雷達掃描：『我現在有沒有分心？我的進度到哪裡了？我現在的情緒如何？』"
@@ -1492,6 +1582,7 @@
         categoryColor: "var(--c-selfmonitor)",
         categoryEmoji: "🪞",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-9.jpg",
+        backImg: "卡背/%E7%B4%AB%E8%89%B2.png",
         tags: ["自我監控 🪞", "注意力 🔦", "抑制 🛑", "計畫 🗺️"],
         desc: "偵測錯誤並判斷錯誤來源，而非只注意結果是否正確。",
         tip: "錯了不沮喪，當作系統偵錯：『是看錯題目？粗心抄錯？還是概念還不清楚？』找到真正的 Bug 才能對症下藥。"
@@ -1518,25 +1609,14 @@
       });
     });
 
-    // 3D TILT & HOLO SHINE ON HOVER
+    // HOLO SHINE TRACKING ON HOVER
     cardItems.forEach(card => {
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateX = ((y - centerY) / centerY) * -12;
-        const rotateY = ((x - centerX) / centerX) * 12;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
         card.style.setProperty('--mouse-x', `${x}px`);
         card.style.setProperty('--mouse-y', `${y}px`);
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
       });
     });
 
@@ -1545,6 +1625,7 @@
     const modalClose = document.getElementById('modalClose');
     const modal3dCard = document.getElementById('modal3dCard');
     const modalCardImg = document.getElementById('modalCardImg');
+    const modalCardBackImg = document.getElementById('modalCardBackImg');
     const modalCardName = document.getElementById('modalCardName');
     const modalCardDesc = document.getElementById('modalCardDesc');
     const modalCardTip = document.getElementById('modalCardTip');
@@ -1557,7 +1638,7 @@
 
     let currentCardIndex = 0;
     let isFlipped = false;
-    let isSpinning = false;
+    let isSpinning = true;
 
     function renderModalCard(index) {
       currentCardIndex = (index + CARD_DATA.length) % CARD_DATA.length;
@@ -1565,17 +1646,19 @@
 
       modalCardImg.src = data.img;
       modalCardImg.alt = data.title;
+      modalCardBackImg.src = data.backImg;
+      modalCardBackImg.alt = `${data.title} 卡背`;
       modalCardName.textContent = data.title;
       modalCardDesc.textContent = data.desc;
       modalCardTip.textContent = data.tip;
       modalCounter.textContent = `${currentCardIndex + 1} / ${CARD_DATA.length}`;
 
-      // Reset transforms
+      // Reset transforms and start auto spin immediately
       isFlipped = false;
       modal3dCard.classList.remove('flipped');
-      isSpinning = false;
-      modal3dCard.classList.remove('spin-animation');
-      spinBtn.textContent = "✨ 360° 閃光旋轉";
+      isSpinning = true;
+      modal3dCard.classList.add('spin-animation');
+      spinBtn.textContent = "⏹️ 暫停旋轉";
 
       // Render tags
       modalTags.innerHTML = `
@@ -1608,17 +1691,40 @@
       if (e.target === modal) closeModal();
     });
 
-    // Flip Card
+    // Flip Card (Pauses spin if spinning)
     flipBtn.addEventListener('click', () => {
+      if (isSpinning) {
+        isSpinning = false;
+        modal3dCard.classList.remove('spin-animation');
+        spinBtn.textContent = "✨ 360° 旋轉";
+      }
       isFlipped = !isFlipped;
       modal3dCard.classList.toggle('flipped', isFlipped);
     });
 
-    // Spin Card
+    // Click on 3D card directly to flip or pause
+    modal3dCard.addEventListener('click', () => {
+      if (isSpinning) {
+        isSpinning = false;
+        modal3dCard.classList.remove('spin-animation');
+        spinBtn.textContent = "✨ 360° 旋轉";
+        isFlipped = true;
+        modal3dCard.classList.add('flipped');
+      } else {
+        isFlipped = !isFlipped;
+        modal3dCard.classList.toggle('flipped', isFlipped);
+      }
+    });
+
+    // Spin Card Toggle
     spinBtn.addEventListener('click', () => {
       isSpinning = !isSpinning;
+      if (isSpinning) {
+        isFlipped = false;
+        modal3dCard.classList.remove('flipped');
+      }
       modal3dCard.classList.toggle('spin-animation', isSpinning);
-      spinBtn.textContent = isSpinning ? "⏹️ 停止旋轉" : "✨ 360° 閃光旋轉";
+      spinBtn.textContent = isSpinning ? "⏹️ 暫停旋轉" : "✨ 360° 旋轉";
     });
 
     // Next / Prev Card
