@@ -9,7 +9,7 @@
       location.replace('https:' + location.href.substring(location.protocol.length));
     }
   </script>
-  <title>深耕台灣計畫 — 執行功能訓練卡牌 (系統升級建置中)</title>
+  <title>大腦指揮官 — 執行功能訓練卡牌 (系統升級建置中)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -735,14 +735,19 @@
       position: relative;
       transform-style: preserve-3d;
       -webkit-transform-style: preserve-3d;
-      animation: modalAutoSpin 5s linear infinite;
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    @keyframes modalAutoSpin {
+    .card-3d-box:hover {
+      transform: scale(1.04);
+      animation: modalHoverSpin 4.5s linear infinite;
+    }
+    @keyframes modalHoverSpin {
       0% {
-        transform: rotateY(0deg);
+        transform: scale(1.04) rotateY(0deg);
       }
       100% {
-        transform: rotateY(360deg);
+        transform: scale(1.04) rotateY(360deg);
       }
     }
 
@@ -937,9 +942,9 @@
   <div class="hazard-strip">
     <div class="hazard-marquee">
       <span>🚧 網站施工建置中 · 執行功能訓練卡牌 🚧</span>
-      <span>林口長庚兒童心智科 × 衛生福利部 深耕台灣計畫</span>
+      <span>🧠 大腦指揮官系統 · 施工升級中 🚧</span>
       <span>🚧 網站施工建置中 · 執行功能訓練卡牌 🚧</span>
-      <span>林口長庚兒童心智科 × 衛生福利部 深耕台灣計畫</span>
+      <span>🧠 大腦指揮官系統 · 施工升級中 🚧</span>
     </div>
   </div>
 
@@ -964,10 +969,6 @@
       大腦指揮官訓練系統<br>
       <span class="construct-badge-large">🚧 執行功能訓練卡牌 · 施工建置中 🚧</span>
     </h1>
-
-    <p class="hero-desc">
-      林口長庚兒童心智科 × 衛生福利部 深耕台灣計畫
-    </p>
   </header>
 
   <!-- SIX EXECUTIVE FUNCTIONS SECTION -->
@@ -1296,7 +1297,7 @@
 
       <!-- 3D CARD DISPLAY STAGE -->
       <div class="modal-stage">
-        <div class="card-3d-box spin-animation" id="modal3dCard">
+        <div class="card-3d-box" id="modal3dCard">
           <div class="card-face front">
             <img id="modalCardImg" src="" alt="卡牌正面">
           </div>
@@ -1336,9 +1337,8 @@
   <!-- FOOTER -->
   <footer class="footer" id="about">
     <div class="footer-hazard"></div>
-    <div class="footer-brand">深耕台灣計畫 — 執行功能訓練卡牌</div>
-    <p style="margin-bottom: 0.4rem;">林口長庚醫院 兒童心智科 × 衛生福利部</p>
-    <p style="font-size: 0.85rem; opacity: 0.7;">
+    <div class="footer-brand">大腦指揮官 — 執行功能訓練卡牌</div>
+    <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.4rem;">
       🚧 網站施工建置中
     </p>
   </footer>
