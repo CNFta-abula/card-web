@@ -615,10 +615,12 @@
       display: block;
     }
     .card-3d-face.front {
-      transform: rotateY(0deg);
+      transform: rotateY(0deg) translateZ(1px);
+      -webkit-transform: rotateY(0deg) translateZ(1px);
     }
     .card-3d-face.back {
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateZ(1px);
+      -webkit-transform: rotateY(180deg) translateZ(1px);
     }
 
     .card-meta {
@@ -745,35 +747,31 @@
       position: relative;
     }
     .card-3d-box {
-      width: 250px;
-      height: 380px;
+      width: 260px;
+      aspect-ratio: 709 / 1075;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: grab;
-      filter: drop-shadow(0 16px 24px rgba(0,0,0,0.2));
+      -webkit-transform-style: preserve-3d;
+      animation: modalAutoSpin 5s linear infinite;
     }
-    .card-3d-box:active { cursor: grabbing; }
-    .card-3d-box.flipped {
-      transform: rotateY(180deg);
-    }
-    .card-3d-box.spin-animation {
-      animation: autoSpin 10s linear infinite;
-    }
-    @keyframes autoSpin {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
+    @keyframes modalAutoSpin {
+      0% {
+        transform: rotateY(0deg);
+      }
+      100% {
+        transform: rotateY(360deg);
+      }
     }
 
     .card-face {
       position: absolute;
       inset: 0;
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       border: 3px solid #FFFFFF;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
       background: #FAF8F5;
     }
     .card-face img {
@@ -781,41 +779,17 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
     .card-face.front {
-      transform: rotateY(0deg);
+      transform: rotateY(0deg) translateZ(1px);
+      -webkit-transform: rotateY(0deg) translateZ(1px);
     }
     .card-face.back {
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateZ(1px);
+      -webkit-transform: rotateY(180deg) translateZ(1px);
       background: #FAF8F5;
-    }
-
-    /* FLIP & ROTATE CONTROLS */
-    .stage-controls {
-      display: flex;
-      gap: 0.6rem;
-      margin-top: 1.4rem;
-      z-index: 10;
-    }
-    .stage-btn {
-      background: #FFFFFF;
-      border: 2px solid var(--text);
-      padding: 0.45rem 0.9rem;
-      border-radius: 100px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: var(--text);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      transition: all 0.2s;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
-    }
-    .stage-btn:hover {
-      background: var(--text);
-      color: #FFF;
-      transform: translateY(-2px);
     }
 
     /* MODAL DETAILS */
@@ -1383,11 +1357,6 @@
             <img id="modalCardBackImg" src="" alt="卡牌背面">
           </div>
         </div>
-
-        <div class="stage-controls">
-          <button class="stage-btn" id="flipBtn">🔄 翻轉卡背</button>
-          <button class="stage-btn" id="spinBtn">⏹️ 暫停旋轉</button>
-        </div>
       </div>
 
       <!-- CARD DETAILS & ACTION TIPS -->
@@ -1631,14 +1600,10 @@
     const modalCardTip = document.getElementById('modalCardTip');
     const modalTags = document.getElementById('modalTags');
     const modalCounter = document.getElementById('modalCounter');
-    const flipBtn = document.getElementById('flipBtn');
-    const spinBtn = document.getElementById('spinBtn');
     const prevCardBtn = document.getElementById('prevCardBtn');
     const nextCardBtn = document.getElementById('nextCardBtn');
 
     let currentCardIndex = 0;
-    let isFlipped = false;
-    let isSpinning = true;
 
     function renderModalCard(index) {
       currentCardIndex = (index + CARD_DATA.length) % CARD_DATA.length;
@@ -1652,13 +1617,6 @@
       modalCardDesc.textContent = data.desc;
       modalCardTip.textContent = data.tip;
       modalCounter.textContent = `${currentCardIndex + 1} / ${CARD_DATA.length}`;
-
-      // Reset transforms and start auto spin immediately
-      isFlipped = false;
-      modal3dCard.classList.remove('flipped');
-      isSpinning = true;
-      modal3dCard.classList.add('spin-animation');
-      spinBtn.textContent = "⏹️ 暫停旋轉";
 
       // Render tags
       modalTags.innerHTML = `
@@ -1682,49 +1640,11 @@
     function closeModal() {
       modal.classList.remove('open');
       document.body.style.overflow = '';
-      isSpinning = false;
-      modal3dCard.classList.remove('spin-animation');
     }
 
     modalClose.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
-    });
-
-    // Flip Card (Pauses spin if spinning)
-    flipBtn.addEventListener('click', () => {
-      if (isSpinning) {
-        isSpinning = false;
-        modal3dCard.classList.remove('spin-animation');
-        spinBtn.textContent = "✨ 360° 旋轉";
-      }
-      isFlipped = !isFlipped;
-      modal3dCard.classList.toggle('flipped', isFlipped);
-    });
-
-    // Click on 3D card directly to flip or pause
-    modal3dCard.addEventListener('click', () => {
-      if (isSpinning) {
-        isSpinning = false;
-        modal3dCard.classList.remove('spin-animation');
-        spinBtn.textContent = "✨ 360° 旋轉";
-        isFlipped = true;
-        modal3dCard.classList.add('flipped');
-      } else {
-        isFlipped = !isFlipped;
-        modal3dCard.classList.toggle('flipped', isFlipped);
-      }
-    });
-
-    // Spin Card Toggle
-    spinBtn.addEventListener('click', () => {
-      isSpinning = !isSpinning;
-      if (isSpinning) {
-        isFlipped = false;
-        modal3dCard.classList.remove('flipped');
-      }
-      modal3dCard.classList.toggle('spin-animation', isSpinning);
-      spinBtn.textContent = isSpinning ? "⏹️ 暫停旋轉" : "✨ 360° 旋轉";
     });
 
     // Next / Prev Card
@@ -1737,10 +1657,6 @@
       if (e.key === 'Escape') closeModal();
       if (e.key === 'ArrowLeft') renderModalCard(currentCardIndex - 1);
       if (e.key === 'ArrowRight') renderModalCard(currentCardIndex + 1);
-      if (e.key === ' ' || e.key === 'f') {
-        e.preventDefault();
-        flipBtn.click();
-      }
     });
   </script>
 </body>
