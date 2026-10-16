@@ -651,24 +651,7 @@
     .card-cat-badge.plan { background: var(--c-plan); }
     .card-cat-badge.selfmonitor { background: var(--c-selfmonitor); }
 
-    .card-click-hint {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 1px dashed #E6DECة;
-    }
-    .card-click-hint span {
-      transition: transform 0.2s;
-    }
-    .card-item:hover .card-click-hint span {
-      transform: translateX(3px);
-    }
+
 
     /* MODAL: 3D CARD INSPECTOR & FLIP */
     .modal-overlay {
@@ -1033,9 +1016,9 @@
       <!-- 認知彈性 -->
       <div class="fn-card cognitive">
         <div class="fn-card-top">
-          <div class="fn-icon-box"><img src="icon_package/認知彈性.png?v=20261016" alt="認知彈性"></div>
+          <div class="fn-icon-box"><img src="icon_package/認知彈性.png?v=20261016" alt="彈性"></div>
           <div>
-            <div class="fn-title">認知彈性</div>
+            <div class="fn-title">彈性</div>
             <span class="fn-metaphor">大腦的變速器</span>
           </div>
         </div>
@@ -1072,7 +1055,7 @@
   <section class="section" id="cards">
     <div class="section-header">
       <h2 class="section-title">卡牌總覽</h2>
-      <p class="section-desc">滑鼠懸停即可放大 3D 旋轉預覽卡背，點擊卡牌開啟完整訓練引導</p>
+      <p class="section-desc">點擊卡牌開啟完整訓練引導</p>
     </div>
 
     <!-- FILTER TABS -->
@@ -1081,7 +1064,7 @@
       <button class="filter-btn" data-cat="inhibit">抑制 (2)</button>
       <button class="filter-btn" data-cat="selfmonitor">自我監控 (2)</button>
       <button class="filter-btn" data-cat="attention">注意力 (2)</button>
-      <button class="filter-btn" data-cat="cognitive">認知彈性 (2)</button>
+      <button class="filter-btn" data-cat="cognitive">彈性 (2)</button>
       <button class="filter-btn" data-cat="plan">計畫 (2)</button>
       <button class="filter-btn" data-cat="workmemory">工作記憶 (2)</button>
     </div>
@@ -1104,9 +1087,6 @@
           <div class="card-title-label">再想一下法</div>
           <span class="card-cat-badge inhibit">抑制 🛑</span>
         </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
-        </div>
       </div>
 
       <!-- 2: 想法放下法 (抑制) -->
@@ -1124,9 +1104,6 @@
         <div class="card-meta">
           <div class="card-title-label">想法放下法</div>
           <span class="card-cat-badge inhibit">抑制 🛑</span>
-        </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
@@ -1146,9 +1123,6 @@
           <div class="card-title-label">目標鎖定法</div>
           <span class="card-cat-badge attention">注意力 🔦</span>
         </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
-        </div>
       </div>
 
       <!-- 4: 線索搜查法 (注意力) -->
@@ -1166,9 +1140,6 @@
         <div class="card-meta">
           <div class="card-title-label">線索搜查法</div>
           <span class="card-cat-badge attention">注意力 🔦</span>
-        </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
@@ -1188,9 +1159,6 @@
           <div class="card-title-label">動態替換法</div>
           <span class="card-cat-badge workmemory">工作記憶 📋</span>
         </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
-        </div>
       </div>
 
       <!-- 6: 心算暫存法 (工作記憶) -->
@@ -1209,12 +1177,9 @@
           <div class="card-title-label">心算暫存法</div>
           <span class="card-cat-badge workmemory">工作記憶 📋</span>
         </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
-        </div>
       </div>
 
-      <!-- 7: 備案開箱法 (認知彈性) -->
+      <!-- 7: 備案開箱法 (彈性) -->
       <div class="card-item" data-cat="cognitive" data-index="6">
         <div class="card-3d-wrap">
           <div class="card-3d-flipper">
@@ -1222,20 +1187,17 @@
               <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg" alt="備案開箱法">
             </div>
             <div class="card-3d-face back">
-              <img src="卡背/%E6%A9%98%E8%89%B2.png" alt="認知彈性卡背">
+              <img src="卡背/%E6%A9%98%E8%89%B2.png" alt="彈性卡背">
             </div>
           </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">備案開箱法</div>
-          <span class="card-cat-badge cognitive">認知彈性 ⚙️</span>
-        </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
+          <span class="card-cat-badge cognitive">彈性 ⚙️</span>
         </div>
       </div>
 
-      <!-- 8: 角色借用法 (認知彈性) -->
+      <!-- 8: 角色借用法 (彈性) -->
       <div class="card-item" data-cat="cognitive" data-index="7">
         <div class="card-3d-wrap">
           <div class="card-3d-flipper">
@@ -1243,16 +1205,13 @@
               <img src="newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg" alt="角色借用法">
             </div>
             <div class="card-3d-face back">
-              <img src="卡背/%E6%A9%98%E8%89%B2.png" alt="認知彈性卡背">
+              <img src="卡背/%E6%A9%98%E8%89%B2.png" alt="彈性卡背">
             </div>
           </div>
         </div>
         <div class="card-meta">
           <div class="card-title-label">角色借用法</div>
-          <span class="card-cat-badge cognitive">認知彈性 ⚙️</span>
-        </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
+          <span class="card-cat-badge cognitive">彈性 ⚙️</span>
         </div>
       </div>
 
@@ -1272,9 +1231,6 @@
           <div class="card-title-label">第一小步法</div>
           <span class="card-cat-badge plan">計畫 🗺️</span>
         </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
-        </div>
       </div>
 
       <!-- 10: 倒敘時間法 (計畫) -->
@@ -1292,9 +1248,6 @@
         <div class="card-meta">
           <div class="card-title-label">倒敘時間法</div>
           <span class="card-cat-badge plan">計畫 🗺️</span>
-        </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
 
@@ -1314,9 +1267,6 @@
           <div class="card-title-label">當下掃描法</div>
           <span class="card-cat-badge selfmonitor">自我監控 🪞</span>
         </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
-        </div>
       </div>
 
       <!-- 12: 錯誤定位法 (自我監控) -->
@@ -1334,9 +1284,6 @@
         <div class="card-meta">
           <div class="card-title-label">錯誤定位法</div>
           <span class="card-cat-badge selfmonitor">自我監控 🪞</span>
-        </div>
-        <div class="card-click-hint">
-          <span>懸停旋轉・點擊檢視</span> <span>→</span>
         </div>
       </div>
     </div>
@@ -1461,7 +1408,7 @@
         categoryEmoji: "📋",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-2.jpg",
         backImg: "卡背/%E7%B6%A0%E8%89%B2.png",
-        tags: ["工作記憶 📋", "認知彈性 ⚙️", "自我監控 🪞"],
+        tags: ["工作記憶 📋", "彈性 ⚙️", "自我監控 🪞"],
         desc: "練習快速把最新的重要資訊放進工作記憶，讓自己始終掌握「最新版本」。",
         tip: "舊資訊使用完畢後主動在大腦中打勾清除，騰出記憶工作檯，隨時更新即時指令與數值。"
       },
@@ -1482,12 +1429,12 @@
         id: 6,
         title: "備案開箱法",
         category: "cognitive",
-        categoryName: "認知彈性",
+        categoryName: "彈性",
         categoryColor: "var(--c-cognitive)",
         categoryEmoji: "⚙️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-4.jpg",
         backImg: "卡背/%E6%A9%98%E8%89%B2.png",
-        tags: ["認知彈性 ⚙️", "注意力 🔦", "抑制 🛑", "工作記憶 📋"],
+        tags: ["彈性 ⚙️", "注意力 🔦", "抑制 🛑", "工作記憶 📋"],
         desc: "當原來的方法卡住時，先想出至少兩個不同做法，不急著認定只有一條路。",
         tip: "遇到困難時別急著慌張，告訴自己『這條路封路了，來開箱 Plan B 與 Plan C』，快速切換解題路徑。"
       },
@@ -1495,12 +1442,12 @@
         id: 7,
         title: "角色借用法",
         category: "cognitive",
-        categoryName: "認知彈性",
+        categoryName: "彈性",
         categoryColor: "var(--c-cognitive)",
         categoryEmoji: "⚙️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-5.jpg",
         backImg: "卡背/%E6%A9%98%E8%89%B2.png",
-        tags: ["認知彈性 ⚙️", "自我監控 🪞"],
+        tags: ["彈性 ⚙️", "自我監控 🪞"],
         desc: "腦袋當機時，跳脫「我」的視角，假裝自己是你最佩服的人，用他的思維模式來重新定義問題。",
         tip: "問問自己：『如果是偵探福爾摩斯或我最喜歡的老師，他在這個情況下會怎麼看這件事？』"
       },
@@ -1526,7 +1473,7 @@
         categoryEmoji: "🗺️",
         img: "newcard/ok%E7%B4%AB%E7%B4%85%E9%BB%83-7.jpg",
         backImg: "卡背/%E8%97%8D%E8%89%B2.png",
-        tags: ["計畫 🗺️", "工作記憶 📋", "認知彈性 ⚙️"],
+        tags: ["計畫 🗺️", "工作記憶 📋", "彈性 ⚙️"],
         desc: "把最後期限當作起點，從終點「往回推算」每一天的前置任務，用倒敘法幫自己畫出一張清晰的行動藍圖。",
         tip: "以繳交日前一天作為安全終點線，往前回推檢查時間、製作時間、準備材料時間，排出從容的節奏。"
       },
